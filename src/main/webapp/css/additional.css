@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+
+
+.realtime-graph img {
+	
+	witdth : 700px;
+	height : 400px;
+	
+    display: block;
+    margin: 0 auto;
+	
+}
