@@ -170,11 +170,9 @@ public class ActionnerServlet extends HttpServlet {
 					dactioner.setAct_activated(true);
 
 					try {
-						logger.info("Saving Actioner" + dactioner.getAct_uuid());
-						dactioner = genActionerService.save(dactioner);
 						logger.info("Saved actioner ID : "
 								+ dactioner.getAct_id());
-					} catch (DAOException e) {
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

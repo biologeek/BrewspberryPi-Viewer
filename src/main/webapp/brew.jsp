@@ -25,7 +25,13 @@
         <![endif]-->
 <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
+<script type="text/javascript">
 
+function changeActionerState(etape, actioner){
+	
+	
+}
+</script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Brassin n°${brassin.getBra_id()}</title>
 </head>
@@ -91,12 +97,26 @@
 											</tr>
 
 											<tr>
-												<td><c:forEach
-														items="${evenSteps[loop.index].getEtp_actioner()}"
-														var="actioner">
-														<img src="images/${actioner.getAct_type()}.png"
-															title="${actioner.getAct_uuid()}" />
-													</c:forEach></td>
+												<td>
+													<div class="container">
+														<h1 class="title">Dropdown Menu</h1>
+														<ul>
+															<li class="dropdown"><a href="#"
+																data-toggle="dropdown">First Menu <i
+																	class="icon-arrow"></i></a>
+																<ul class="dropdown-menu">
+																	<c:forEach
+																		items="${availableActioners}"
+																		var="actioner">
+																		<li><a href="#"
+																			onclick="changeActionerState(${evenSteps[loop.index].getEtp_id()},${actioner.getAct_id()});">${actioner.getAct_nom()}</a></li>
+																	</c:forEach>
+
+																</ul></li>
+														</ul>
+													</div> < <img src="images/${actioner.getAct_type()}.png"
+													title="${actioner.getAct_uuid()}" />
+												</td>
 											</tr>
 										</tbody>
 									</table>

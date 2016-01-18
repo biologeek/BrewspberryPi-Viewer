@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.brewspberry.business.IGenericDao;
 import net.brewspberry.business.IGenericService;
+import net.brewspberry.business.beans.Actioner;
 import net.brewspberry.business.beans.Brassin;
 import net.brewspberry.business.beans.Etape;
 import net.brewspberry.business.beans.TemperatureMeasurement;
@@ -20,6 +21,7 @@ import net.brewspberry.business.service.BrassinServiceImpl;
 import net.brewspberry.dao.TemperatureMeasurementDaoImpl;
 import net.brewspberry.util.ConfigLoader;
 import net.brewspberry.util.Constants;
+import net.brewspberry.util.DeviceParser;
 
 /**
  * Servlet implementation class Accueil
@@ -82,6 +84,10 @@ public class Accueil extends HttpServlet {
 			List<Etape> evenSteps = new ArrayList<Etape>();
 			
 			
+			List<Actioner> availableActioners = new ArrayList<Actioner>();
+			
+			availableActioners = DeviceParser.getInstance().getDevices(Constants.DEVICES_PROPERTIES);
+			
 			// To display two steps per line
 			Boolean isEven = true;
 			for (Etape step : currentBrew.getBra_etapes()){
@@ -96,6 +102,7 @@ public class Accueil extends HttpServlet {
 			}
 			request.setAttribute("oddSteps", oddSteps);
 			request.setAttribute("evenSteps", evenSteps);
+			request.setAttribute("availableActioners", availableActioners);
 			request.setAttribute("tempServlet", ConfigLoader.getConfigByKey(Constants.CONFIG_PROPERTIES, "servlets.temperature.graph"));
 
 			
