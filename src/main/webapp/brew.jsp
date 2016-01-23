@@ -105,9 +105,7 @@ function changeActionerState(etape, actioner){
 																data-toggle="dropdown">First Menu <i
 																	class="icon-arrow"></i></a>
 																<ul class="dropdown-menu">
-																	<c:forEach
-																		items="${availableActioners}"
-																		var="actioner">
+																	<c:forEach items="${availableActioners}" var="actioner">
 																		<li><a href="#"
 																			onclick="changeActionerState(${evenSteps[loop.index].getEtp_id()},${actioner.getAct_id()});">${actioner.getAct_nom()}</a></li>
 																	</c:forEach>
@@ -183,39 +181,50 @@ function changeActionerState(etape, actioner){
 				</c:forEach>
 				<div class="row-fluid">
 
-					<div class="span6">
-						<!-- block -->
-						<div class="block">
-							<div class="navbar navbar-inner block-header">
-								<div class="muted pull-left">Ajouter une étape</div>
-								<div class="pull-right">
-									<span class="badge badge-info">${evenSteps.size() + oddSteps.size()}</span>
+					<!-- block -->
+					<div class="block">
+						<div class="navbar navbar-inner block-header">
+							<div class="muted pull-left">Ajouter une étape</div>
+							<div class="pull-right">
+								<span class="badge badge-info">${evenSteps.size() + oddSteps.size()}</span>
 
-								</div>
 							</div>
-							<div class="block-content collapse in">
+						</div>
+						<div class="block-content collapse in">
+							<form action="AddOrUpdateBrew?typeOfAdding=step" class="form-horizontal"
+								method="post">
 								<table class="table table-striped">
 									<tbody>
 										<tr>
 											<td>Label</td>
 											<td><input type="text" name="step_label" /></td>
-										</tr>
-										<tr>
+
 											<td>Durée théorique</td>
 											<td><input type="text" name="step_duration" /></td>
 										</tr>
 										<tr>
 											<td>Température théorique</td>
 											<td><input type="text" name="step_temperature" /></td>
-										</tr>
-										<tr>
+
 											<td>Commentaire</td>
 											<td><textarea name="step_comment" rows="3" cols="15"></textarea></td>
 										</tr>
-
+										<tr>
+											<td>Etape n°</td>
+											<td><input type="text" name="step_number" value="${evenSteps.size() + oddSteps.size()}" /></td>
+											<td></td>
+											<td></td>
+											<td>
+										</tr>
+										<tr>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td><button type="submit" class="btn btn-primary">+</button></td>
+										</tr>
 									</tbody>
 								</table>
-							</div>
+							</form>
 						</div>
 						<!-- /block -->
 					</div>

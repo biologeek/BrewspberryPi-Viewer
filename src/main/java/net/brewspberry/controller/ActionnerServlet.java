@@ -33,7 +33,8 @@ public class ActionnerServlet extends HttpServlet {
 	private ActionerServiceImpl genActionerService = new ActionerServiceImpl();
 
 	private BrassinServiceImpl brassinService = new BrassinServiceImpl();
-	static Logger logger = LogManager.getInstance(ActionnerServlet.class.toString());
+	static Logger logger = LogManager.getInstance(ActionnerServlet.class
+			.toString());
 
 	List<Actioner> actioners = new ArrayList<Actioner>();
 
@@ -45,6 +46,8 @@ public class ActionnerServlet extends HttpServlet {
 	}
 
 	/**
+	 * @throws IOException 
+	 * @throws ServletException 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -100,6 +103,18 @@ public class ActionnerServlet extends HttpServlet {
 				/*
 				 * Activation of Actioner : sets actioner_activated to True sets
 				 * Actioner ID in props file
+				 * 
+				 * When is it used ?
+				 * 
+				 * When a step begins, you activate actionners you want to use,
+				 * it starts them, meaning for example starting measuring
+				 * temperatures or chaging the state of a relay (starting the
+				 * pump, ...)
+				 * 
+				 * Programatically, - Select device in device.properties
+				 * (thinking of JSON or XML instead of properties...) - Change
+				 * its status - Save it in database - Get the ID and update
+				 * properties file
 				 */
 
 				String uuid = null;
@@ -115,28 +130,28 @@ public class ActionnerServlet extends HttpServlet {
 
 					try {
 						logger.info("Saving Actioner " + actioner.getAct_uuid());
-						actioner = actionerService.startAction(actioner);
-						logger.info("Saved actioner ID : "
+						actioner = actionerService.startAction(actioner); // Checked
+						logger.fine("Saved actioner ID : "
 								+ actioner.getAct_id());
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					/*
+
 					if (actioner.getAct_id() != 0) {
 						try {
-							logger.info("Trying to set ID to actioner");
+							logger.info("Trying to set ID to actioner in devices.properties");
 							DeviceParser.getInstance()
 									.setIdToActioner(actioner);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
+						} catch (Exception e) { // TODO Auto-generated catch
+												// block
 							e.printStackTrace();
+
 						}
-					}
-					else {
+					} else {
 						logger.info("Arf shit ! actioner has id=0");
 					}
-					*/
+
 					/*
 					 * // Start action if type=ds18b20 if
 					 * (actioner.getAct_type().equals(Constants.ACT_DS18B20)) {
@@ -147,6 +162,8 @@ public class ActionnerServlet extends HttpServlet {
 					 */
 					actioners = DeviceParser.getInstance().getDevices(
 							Constants.DEVICES_PROPERTIES);
+
+					// Returning actioners to page
 
 					request.setAttribute("actioners", actioners);
 
@@ -167,32 +184,46 @@ public class ActionnerServlet extends HttpServlet {
 					dactioner = DeviceParser.getInstance().getDeviceByUUID(
 							Constants.DEVICES_PROPERTIES, duuid);
 
-					dactioner.setAct_activated(true);
-
-					try {
-						logger.info("Saved actioner ID : "
-								+ dactioner.getAct_id());
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					try {
-						logger.info("Trying to set ID to actioner");
-						DeviceParser.getInstance().setIdToActioner(dactioner);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					// Start action if type=ds18b20
-					if (dactioner.getAct_type().equals(Constants.ACT_DS18B20)) {
+					if (dactioner.getAct_id() != 0) {
 
 						try {
-							dactioner = actionerService.startAction(dactioner);
+							logger.info("Saved actioner ID : "
+									+ dactioner.getAct_id());
+							actionerService.stopAction(dactioner);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						try {
+							logger.info("Trying to set ID to actioner");
+							DeviceParser.getInstance().setIdToActioner(
+									dactioner);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						// Start action if type=ds18b20
+						if (dactioner.getAct_type().equals(
+								Constants.ACT_DS18B20)) {
+
+							try {
+								dactioner = actionerService
+										.startAction(dactioner);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						else {
+							try {
+								throw new Exception ("Could not found ID for UUID"+dactioner.getAct_uuid());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+
 					}
 					actioners = DeviceParser.getInstance().getDevices(
 							Constants.DEVICES_PROPERTIES);
