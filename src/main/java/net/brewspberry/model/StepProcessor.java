@@ -21,7 +21,7 @@ import net.brewspberry.business.service.MaltServiceImpl;
 import net.brewspberry.business.service.YeastServiceImpl;
 import net.brewspberry.util.LogManager;
 
-public class StepProcessor implements Processor<Brassin> {
+public class StepProcessor implements Processor<Object> {
 
 	IGenericService<Etape> etapeService = (IGenericService<Etape>) new EtapeServiceImpl();
 	ISpecificIngredientService maltIngSpecService = (ISpecificIngredientService) new MaltServiceImpl();
@@ -36,7 +36,7 @@ public class StepProcessor implements Processor<Brassin> {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 
 	@Override
-	public Boolean record(Brassin currentBrassin, HttpServletRequest request) {
+	public Boolean record(Object parent, HttpServletRequest request) {
 
 		/**
 		 * Whether stepID is null or not this will fill the fields
@@ -51,29 +51,29 @@ public class StepProcessor implements Processor<Brassin> {
 		String currentStepNumber;
 
 		Etape currentStep = new Etape();
-		
-		
-		if (currentStepID != null) {
+
+		if (parent instanceof Etape) {
+			
 			/*
-			 * If there's an ID field, means the step has already been created, 
-			 * so setting it an ID and overwriting other fields
+			 * If parent object parameter is Etape, parent brew is already attached
 			 */
-			try {
-				currentStep.setEtp_id(Long.parseLong(currentStepID));
-			} catch (Exception e) {
-				logger.severe(currentStepID + " step ID is not a number !!");
-				currentStep.setEtp_id(null);
+
+			currentStep = (Etape) parent;
+		}
+
+		else if (parent instanceof Brassin) {
+
+			/*
+			 * else, we're creating a new Step, it's necesary to attach brew
+			 */
+			Brassin parentBrew = (Brassin) parent;
+			
+			// Attaching brew to step
+			if (parent != null && parentBrew.getBra_id() != null) {
+				currentStep.setEtp_brassin(parentBrew);
 			}
+
 		}
-		
-		
-
-		// Attaching brew to step
-		if (currentBrassin != null && currentBrassin.getBra_id() != null){
-			currentStep.setEtp_brassin(currentBrassin);
-		}
-
-
 
 		// Step beginning date
 		if (request.getParameter("step_beginning") != null) {
@@ -87,16 +87,17 @@ public class StepProcessor implements Processor<Brassin> {
 			}
 
 			if (currentStep.getEtp_debut() == null) {
-				
+
 				try {
-					currentStepBeginningDate = sdf.parse(request.getParameter("step_beginnging"));
+					currentStepBeginningDate = sdf.parse(request
+							.getParameter("step_beginnging"));
 					currentStep.setEtp_debut(currentStepBeginningDate);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
-					logger.severe(request.getParameter("step_beginnging") + " cannot be converted to Date. Considering now ()");
+					logger.severe(request.getParameter("step_beginnging")
+							+ " cannot be converted to Date. Considering now ()");
 					currentStep.setEtp_debut(new Date());
 				}
-
 
 			}
 
@@ -108,12 +109,14 @@ public class StepProcessor implements Processor<Brassin> {
 
 			try {
 
-				currentStepEndDate = sdf.parse(request.getParameter("step_end"));
+				currentStepEndDate = sdf
+						.parse(request.getParameter("step_end"));
 
 				currentStep.setEtp_fin(currentStepEndDate);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
-				logger.severe(request.getParameter("step_end") + " cannot be converted to Date. Considering now ()");
+				logger.severe(request.getParameter("step_end")
+						+ " cannot be converted to Date. Considering now ()");
 				currentStep.setEtp_fin(new Date());
 			}
 
@@ -150,12 +153,12 @@ public class StepProcessor implements Processor<Brassin> {
 			currentStepTemperature = request.getParameter("step_temperature");
 
 			try {
-			currentStep.setEtp_temperature_theorique(Double
-					.parseDouble(currentStepTemperature));
-			}
-			catch (Exception e){
-				
-				logger.severe("Couldn't convert temperature "+ currentStepTemperature);
+				currentStep.setEtp_temperature_theorique(Double
+						.parseDouble(currentStepTemperature));
+			} catch (Exception e) {
+
+				logger.severe("Couldn't convert temperature "
+						+ currentStepTemperature);
 			}
 		}
 
@@ -178,8 +181,6 @@ public class StepProcessor implements Processor<Brassin> {
 			currentStep.setEtp_numero(Integer.parseInt(currentStepNumber));
 
 		}
-
-		
 
 		// Enregistrement de l'étape
 		try {

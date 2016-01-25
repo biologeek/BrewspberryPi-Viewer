@@ -28,6 +28,10 @@ import net.brewspberry.util.LogManager;
  */
 @WebServlet("/Actionner")
 public class ActionnerServlet extends HttpServlet {
+	
+	/**
+	 * This servlet allows user to either activate, deactivate or use features of actionners
+	 */
 	private static final long serialVersionUID = 1L;
 	private ISpecificActionerService actionerService = new ActionerServiceImpl();
 	private ActionerServiceImpl genActionerService = new ActionerServiceImpl();

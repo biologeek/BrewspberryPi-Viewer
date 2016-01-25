@@ -23,6 +23,7 @@ import net.brewspberry.business.beans.Houblon;
 import net.brewspberry.business.beans.Levure;
 import net.brewspberry.business.beans.Malt;
 import net.brewspberry.business.service.BrassinServiceImpl;
+import net.brewspberry.business.service.EtapeServiceImpl;
 import net.brewspberry.business.service.HopServiceImpl;
 import net.brewspberry.business.service.MaltServiceImpl;
 import net.brewspberry.business.service.YeastServiceImpl;
@@ -58,6 +59,8 @@ public class AddOrUpdateBrew extends HttpServlet {
 	IGenericService<Levure> yeastService = new YeastServiceImpl();
 	ISpecificIngredientService hopIngSpecService = (ISpecificIngredientService) new HopServiceImpl();
 	ISpecificIngredientService levureIngSpecService = (ISpecificIngredientService) new YeastServiceImpl();
+
+	IGenericService<Etape> etapeService = new EtapeServiceImpl();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -149,14 +152,13 @@ public class AddOrUpdateBrew extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 		logger.info("doPost");
 		Enumeration<String> parameterNames = request.getParameterNames();
 
 		List<String[]> paramList = new ArrayList<String[]>();
-		 
+
 		Boolean isUpdate;
 
 		while (parameterNames.hasMoreElements()) {
@@ -173,56 +175,89 @@ public class AddOrUpdateBrew extends HttpServlet {
 				System.out.println("| " + paramName + " " + paramValue);
 
 			}
-			
-			
 
 		}
-		
-		if (request.getParameter("typeOfAdding") != null){
-			String typeOfAdding = request.getParameter("typeOfAdding");
-			switch (typeOfAdding){
-			
-			case "brew" :
-				
-				Processor<Brassin> brewProc = new BrewProcessor();
-				
-				break;
-				
-			case "step" :
-				
-				String stepID = (String) request.getAttribute("step_id");
-				String stepLabel = (String) request.getAttribute("step_label");
-				String stepDuration = (String) request.getAttribute("step_duration");
-				String stepTemperature = (String) request.getAttribute("step_temperature");
-				String stepComment = (String) request.getAttribute("step_comment");
-				String stepNumber= (String) request.getAttribute("step_number");
-				
-				
-				Processor<Brassin> stepProc = new StepProcessor();
 
-				//////////////////////////////////////////////:
-				/// TODO
-				
-				if (stepID == null) {
-					isUpdate = false;
+		if (request.getParameter("typeOfAdding") != null) {
+			String typeOfAdding = request.getParameter("typeOfAdding");
+			switch (typeOfAdding) {
+
+			/*
+			 * Launching request Procesor (equvalent of Model in MVC)
+			 */
+			case "brew":
+
+				Processor<Brassin> brewProc = new BrewProcessor();
+
+				if (request.getAttribute("brassinID") != null) {
+
+					/*
+					 * Updating
+					 */
+					logger.info("Updating brew whit ID : "
+							+ request.getAttribute("brassinID"));
+					try {
+						Brassin currentBrew = brassinService
+								.getElementById(Long.parseLong((String) request
+										.getAttribute("brassinID")));
+
+						brewProc.record(currentBrew, request);
+
+					} catch (Exception e) {
+
+					}
+
+				} else {
+
+					/*
+					 * Creating new brew
+					 */
+
+					brewProc.record(null, request);
+
 				}
-				else {
-					isUpdate = true;
+
+				break;
+
+			case "step":
+
+				Processor<Object> stepProc = new StepProcessor();
+				Etape currentStep = null;
+
+				String stepID = (String) request.getAttribute("step_id");
+
+				if (stepID != null) {
+					//Updating step
+					
+					try {
+						currentStep = etapeService.getElementById(Long
+								.parseLong(stepID));
+
+						logger.info("Updating step with ID " + stepID);
+
+						if (currentStep != null) {
+							stepProc.record(currentStep, request);
+						}
+					} catch (Exception e) {
+
+						e.printStackTrace();
+					}
+				} else {
+
+					stepProc.record(currentBrassin, request);				
+					
 				}
-				
-				
-			stepProc.record(currentBrassin, request);
-				
+
 				break;
 			}
 
 		}
-		
-			request.setAttribute("bid", currentBrassin.getBra_id());
-			// TODO : rediriger vers la 2 ème page. En attendant, on affiche le
-			// brassin
-			request.getRequestDispatcher("brew.jsp").forward(request, response);
-		
+
+		request.setAttribute("bid", currentBrassin.getBra_id());
+		// TODO : rediriger vers la 2 ème page. En attendant, on affiche le
+		// brassin
+		request.getRequestDispatcher("brew.jsp").forward(request, response);
+
 	}
 
 	public String generateJSON(List<Malt> malts, List<Houblon> hops,

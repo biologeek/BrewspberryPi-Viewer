@@ -165,7 +165,17 @@ function changeActionerState(etape, actioner){
 													<td><c:forEach
 															items="${oddSteps[loop.index].getEtp_actioner()}"
 															var="actioner">
-															<img src="images/${actioner.getAct_type()}" />
+															<c:if test="${actioner.getAct_status() == 10}">
+																<a
+																	href="ActionerServlet?uuid=${actioner.getAct_uuid()}&setStatus=1"><img
+																	src="images/${actioner.getAct_type()}" /></a>
+															</c:if>
+															<!-- status = Stopped -->
+															<c:if test="${actioner.getAct_status() == 1}">
+																<a
+																	href="ActionerServlet?uuid=${actioner.getAct_uuid()}&setStatus=1"><img
+																	src="images/${actioner.getAct_type()}" /></a>
+															</c:if>
 														</c:forEach></td>
 												</tr>
 											</tbody>
@@ -191,8 +201,8 @@ function changeActionerState(etape, actioner){
 							</div>
 						</div>
 						<div class="block-content collapse in">
-							<form action="AddOrUpdateBrew?typeOfAdding=step" class="form-horizontal"
-								method="post">
+							<form action="AddOrUpdateBrew?typeOfAdding=step"
+								class="form-horizontal" method="post">
 								<table class="table table-striped">
 									<tbody>
 										<tr>
@@ -211,7 +221,8 @@ function changeActionerState(etape, actioner){
 										</tr>
 										<tr>
 											<td>Etape n°</td>
-											<td><input type="text" name="step_number" value="${evenSteps.size() + oddSteps.size()}" /></td>
+											<td><input type="text" name="step_number"
+												value="${evenSteps.size() + oddSteps.size()}" /></td>
 											<td></td>
 											<td></td>
 											<td>
