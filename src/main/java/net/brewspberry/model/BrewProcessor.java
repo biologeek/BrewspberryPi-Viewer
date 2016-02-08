@@ -152,8 +152,8 @@ public class BrewProcessor implements Processor<Brassin> {
 				currentBrassinMalts = request.getParameterValues("malt");
 				currentBrassinMaltsQte = request.getParameterValues("maltQte");
 
-				currentBrassin.setBra_malts(maltIngSpecService
-						.getIngredientFromArrayId(currentBrassinMalts));
+//				currentBrassin.setBra_malts(maltIngSpecService
+	//					.getIngredientFromArrayId(currentBrassinMalts));
 
 				int i = 0;
 				if (currentBrassinMalts.length == currentBrassinMaltsQte.length) {
@@ -163,8 +163,8 @@ public class BrewProcessor implements Processor<Brassin> {
 						logger.info("Got " + currentBrassinMalts.length
 								+ " malts, brew mid=" + currentBrassinMalts[i]);
 
-						malt.setIng_quantite(Double
-								.parseDouble(currentBrassinMaltsQte[i]));
+					//	malt.setIng_quantite(Double
+						//		.parseDouble(currentBrassinMaltsQte[i]));
 
 					}
 				} else {
@@ -194,8 +194,8 @@ public class BrewProcessor implements Processor<Brassin> {
 				currentBrassinHoublonsType = request
 						.getParameterValues("houblonType");
 
-				currentBrassin.setBra_houblons(hopIngSpecService
-						.getIngredientFromArrayId(currentBrassinHoublons));
+				//currentBrassin.setBra_houblons(hopIngSpecService
+					//	.getIngredientFromArrayId(currentBrassinHoublons));
 
 				int i = 0;
 				if ((currentBrassinHoublons.length == currentBrassinHoublonsQte.length)
@@ -207,10 +207,10 @@ public class BrewProcessor implements Processor<Brassin> {
 						logger.info("Got " + currentBrassinHoublons.length
 								+ " hops, brew hop id="
 								+ currentBrassinHoublons[i]);
-						houblon.setIng_quantite(Double
-								.parseDouble(currentBrassinHoublonsQte[i]));
-						houblon.setHbl_type(Integer
-								.parseInt(currentBrassinHoublonsType[i]));
+					//	houblon.setIng_quantite(Double
+						//		.parseDouble(currentBrassinHoublonsQte[i]));
+					//	houblon.setHbl_type(Integer
+						//		.parseInt(currentBrassinHoublonsType[i]));
 					}
 
 				} else {
@@ -236,8 +236,8 @@ public class BrewProcessor implements Processor<Brassin> {
 				currentBrassinLevuresQte = request
 						.getParameterValues("levureQte");
 
-				currentBrassin.setBra_levures(levureIngSpecService
-						.getIngredientFromArrayId(currentBrassinLevures));
+			///	currentBrassin.setBra_levures(levureIngSpecService
+				//		.getIngredientFromArrayId(currentBrassinLevures));
 
 				int i = 0;
 				if (currentBrassinLevures.length == currentBrassinLevuresQte.length) {
@@ -248,8 +248,8 @@ public class BrewProcessor implements Processor<Brassin> {
 								+ " yeasts, brew yeast id="
 								+ currentBrassinLevures[i]);
 
-						levure.setIng_quantite(Double
-								.parseDouble(currentBrassinLevuresQte[i]));
+					//	levure.setIng_quantite(Double
+						//		.parseDouble(currentBrassinLevuresQte[i]));
 
 					}
 				} else {

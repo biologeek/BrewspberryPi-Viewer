@@ -273,8 +273,8 @@ public class AddOrUpdateBrew extends HttpServlet {
 
 				JSONmalts = JSONmalts + "\"id\" : \"" + malt.getIng_id()
 						+ "\", " + "\"desc\" : \"" + malt.getIng_desc()
-						+ "\", " + "\"cereale\" : \"" + malt.getMalt_cereale()
-						+ "\", " + "\"type\" : \"" + malt.getMalt_type()
+						+ "\", " + "\"cereale\" : \"" + malt.getSmal_cereale()
+						+ "\", " + "\"type\" : \"" + malt.getSmal_type()
 						+ "\", " + "\"qte\" : \"" + malt.getIng_quantite()
 						+ "\"},";
 			}
@@ -285,8 +285,8 @@ public class AddOrUpdateBrew extends HttpServlet {
 				JSONhops = JSONhops + "{\"typeIng\" :\"hop\",";
 
 				JSONhops = JSONhops + "\"id\" : \"" + hop.getIng_id() + "\", "
-						+ "\"variete\" : \"" + hop.getHbl_variete() + "\", "
-						+ "\"acide_alpha\" : \"" + hop.getHbl_acide_alpha()
+						+ "\"variete\" : \"" + hop.getShbl_variete() + "\", "
+						+ "\"acide_alpha\" : \"" + hop.getShbl_acide_alpha()
 						+ "\", " + "\"qte\" : \"" + hop.getIng_quantite()
 						+ "\"},";
 			}
