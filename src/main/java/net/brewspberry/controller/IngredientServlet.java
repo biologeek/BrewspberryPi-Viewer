@@ -108,6 +108,8 @@ public class IngredientServlet extends HttpServlet {
 		
 		request.setAttribute("cerealType", Constants.CEREALS);
 		request.setAttribute("ingredientType", ingredientType);
+		
+		// Sets ingredients menu list
 		request.setAttribute("ingredientTypes", Constants.INGREDIENT_TYPES);
 		
 		request.getRequestDispatcher("add_update_ingredient.jsp").forward(request, response);
@@ -122,6 +124,10 @@ public class IngredientServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException {
 
 		
+		/*
+		 * Processes ingredient creation or update form 
+		 */
+		
 		AbstractIngredient ingredient = null;
 		String ingredient_id = null;
 		if (request.getAttribute("ingredient_type") != null) {
@@ -130,23 +136,23 @@ public class IngredientServlet extends HttpServlet {
 			long ing_id = 0;
 			Processor proc;
 			
-			Malt malt = null;
-			Levure levure = null;
-			Houblon houblon = null;
+			SimpleMalt malt = new SimpleMalt();
+			SimpleLevure levure = new SimpleLevure();
+			SimpleHoublon houblon = new SimpleHoublon();
 
 			switch (ing_type) {
 
 			case "malt":
 				proc = new SimpleMaltProcessor();
 				
-				
+				// if returns true, it's an update. Ingredient already exists
 				if (isUpdate(request.getAttribute("ingredient_id"))){
 					
 					ingredient_id = (String) request.getAttribute("ingredient_id");
 					try {
 					
 						ing_id = Long.parseLong(ingredient_id);
-						malt = (Malt) simpleMaltService.getElementById(ing_id);
+						malt = (SimpleMalt) simpleMaltService.getElementById(ing_id);
 						
 					} catch (Exception e){
 						
@@ -162,13 +168,14 @@ public class IngredientServlet extends HttpServlet {
 			case "hop":
 				proc = new SimpleHopProcessor();
 				
+				// if returns true, it's an update. Ingredient already exists
 				if (isUpdate(request.getAttribute("ingredient_id"))){
 					
 					ingredient_id = (String) request.getAttribute("ingredient_id");
 					try {
 					
 						ing_id = Long.parseLong(ingredient_id);
-						houblon = (Houblon) simpleHopService.getElementById(ing_id);
+						houblon = (SimpleHoublon) simpleHopService.getElementById(ing_id);
 						
 					} catch (Exception e){
 						
@@ -184,13 +191,14 @@ public class IngredientServlet extends HttpServlet {
 			case "yeast":
 				proc = new SimpleYeastProcessor();
 				
+				// if returns true, it's an update. Ingredient already exists
 				if (isUpdate(request.getAttribute("ingredient_id"))){
 					
 					ingredient_id = (String) request.getAttribute("ingredient_id");
 					try {
 					
 						ing_id = Long.parseLong(ingredient_id);
-						levure = (Levure) simpleYeastService.getElementById(ing_id);
+						levure = (SimpleLevure) simpleYeastService.getElementById(ing_id);
 						
 					} catch (Exception e){
 						
@@ -209,7 +217,9 @@ public class IngredientServlet extends HttpServlet {
 	}
 	
 	
-	
+	/**
+	 * If attribute is a positive number, returns true, else false
+	 */
 	private Boolean isUpdate (Object attribute){
 		
 		
@@ -217,8 +227,10 @@ public class IngredientServlet extends HttpServlet {
 
 			try {
 				
-				Long.parseLong((String) attribute);
-				return true;
+				if (Long.parseLong((String) attribute) > 0)
+					return true;
+				else 
+					return false;
 				
 			} catch (Exception e){
 				return false;
