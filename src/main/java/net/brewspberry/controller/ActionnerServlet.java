@@ -138,7 +138,6 @@ public class ActionnerServlet extends HttpServlet {
 						logger.fine("Saved actioner ID : "
 								+ actioner.getAct_id());
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
@@ -147,8 +146,7 @@ public class ActionnerServlet extends HttpServlet {
 							logger.info("Trying to set ID to actioner in devices.properties");
 							DeviceParser.getInstance()
 									.setIdToActioner(actioner);
-						} catch (Exception e) { // TODO Auto-generated catch
-												// block
+						} catch (Exception e) { 
 							e.printStackTrace();
 
 						}

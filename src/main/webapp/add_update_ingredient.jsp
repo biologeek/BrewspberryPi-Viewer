@@ -115,7 +115,8 @@
 			codeToAppend = '<div class="control-group"> \
 		<label class="control-label" for="date01">Malt cereal :</label> \
 		<div class="controls"> \
-			<select name="smal_cereale" id="select01" class="hop-select"> \
+			<select name="smal_cereale" id="select01" class="hop-select">\
+			${maltSpecificCerealMenuOptions} \
 			</select> \
 		</div> \
 	</div> \
@@ -123,11 +124,7 @@
 		<label class="control-label" for="date01">Type of malt :</label> \
 		<div class="controls"> \
 			<select name="smal_type" id="select01" class="hop-select"> \
-				<option value="default" selected="selected"></option> \
-				<option value="white">White</option> \
-				<option value="blond">Blond</option> \
-				<option value="brown">Brown</option> \
-				<option value="black">Black</option> \
+				${maltTypeSpecificMenuOptions} \
 			</select> \
 		</div> \
 	</div> \
@@ -158,23 +155,25 @@
 						<input type="text" name="shbl_acide_alpha" class="span6" \
 							id="typeahead" data-provide="typeahead" data-items="4" \
 							value="${shbl_acide_alpha_val}">\
-				</div> \
+							</div> \
+					</div> \
 				<div class="control-group"> \
-				<label class="control-label" for="date01">Color of malt (EBC) :</label> \
+				<label class="control-label" for="date01">Aromas :</label> \
 				<div class="controls"> \
 					<input type="text" name="shbl_aromes" class="span6" \
 						id="typeahead" data-provide="typeahead" data-items="4" \
 						value="${shbl_aromes_val}"> \
-				</div> \
+						</div> \
+						</div> \
 				<div class="control-group"> \
-				<label class="control-label" for="date01">Color of malt (EBC) :</label> \
+				<label class="control-label" for="date01">Use :</label> \
 				<div class="controls"> \
 					<select name="smal_type" id="select01" class="hop-select"> \
 						<option value="default" selected="selected"></option> \
-						<option value="0">Bittering</option> \
-						<option value="1">Aromatic</option> \
+						${hopTypeSpecificMenuOptions} \
 					</select> \
-				</div> \
+							</div> \
+					</div> \
 	</div>';
 
 			break;
@@ -200,7 +199,8 @@
 						<option value="moyenne">Medium</option> \
 						<option value="forte">High</option> \
 					</select> \
-				</div> \
+					</div> \
+					</div> \
 				<div class="control-group"> \
 					<label class="control-label" for="date01">Aromas :</label> \
 				<div class="controls"> \
@@ -222,6 +222,18 @@
 		
 		$("#"+spec).empty();
 		
+	}
+	</script>
+
+<script type="text/javascript">
+
+
+	// Adds success field if ingredient is created
+	if (${topSuccess} == 1) {
+		$("#content").append ('<div class="alert alert-success"> \
+		<button type="button" class="close" data-dismiss="alert">&times;</button> \
+       	<h4>Success</h4> \
+   		The operation completed successfully</div>');
 	}
 </script>
 
@@ -252,7 +264,7 @@
 					</div>
 					<div class="block-content collapse in">
 						<div class="span12">
-							<form action="IngrediendServlet" class="form-horizontal"
+							<form action="ingredientServlet" class="form-horizontal"
 								method="post">
 								<fieldset>
 									<legend>Ingrédient</legend>
@@ -263,24 +275,46 @@
 										<div class="controls">
 
 											<select name="ingredient_type" id="ingredient_type"
-												class="hop-select" onchange="updatePageWithSpecificFields();">
+												class="hop-select"
+												onchange="updatePageWithSpecificFields();">
 												<option value="default" selected="selected"></option>
-											<c:forEach items="${ingredientTypes}" var="ing" >
-													<option value="${ing.key}" <c:if test="${ing.key == ingredientType}"> selected="selected" </c:if>> ${ing.value}</option>
+												<c:forEach items="${ingredientTypes}" var="ing">
+													<option value="${ing.key}"
+														<c:if test="${ing.key == ingredientType}"> selected="selected" </c:if>>
+														${ing.value}</option>
 
 												</c:forEach>
- 
- 											</select>
+
+											</select>
 										</div>
 									</div>
 
 
+									<div class="control-group">
+										<label class="control-label" for="date01">Description :</label>
+										<div class="controls">
+
+
+											<input type="text" name="ing_description" class="span6"
+												id="typeahead" data-provide="typeahead" data-items="4"
+												value="${ing_fdescription_val}">
+										</div>
+									</div>
 									<div id="specific-parameters"></div>
 
-
-									<br /> <br /> <input type="hidden" name="ingredient_id"
+	 <br /> <input type="hidden" name="ingredient_id"
 										value="${ingredient_id}" />
 
+									<div class="control-group">
+										<label class="control-label" for="date01">Provider :</label>
+										<div class="controls">
+
+
+											<input type="text" name="ing_fournisseur" class="span6"
+												id="typeahead" data-provide="typeahead" data-items="4"
+												value="${ing_fournisseur_val}">
+										</div>
+									</div>
 
 									<div class="form-actions">
 										<button type="submit" class="btn btn-primary">Save

@@ -30,9 +30,9 @@ public class SimpleYeastProcessor implements Processor<SimpleLevure> {
 
 		 if (request != null){
 			 
-			 if (request.getAttribute("ing_description") != null){
+			 if (request.getParameter("ing_description") != null){
 				 
-				 ing_desc = (String) request.getAttribute("ing_description");
+				 ing_desc = (String) request.getParameter("ing_description");
 				 
 				 parentObject.setIng_desc(ing_desc);
 			 } else {
@@ -40,9 +40,9 @@ public class SimpleYeastProcessor implements Processor<SimpleLevure> {
 			 }
 			 
 
-			 if (request.getAttribute("ing_fournisseur") != null){
+			 if (request.getParameter("ing_fournisseur") != null){
 				 
-				 ing_four = (String) request.getAttribute("ing_fournisseur");
+				 ing_four = (String) request.getParameter("ing_fournisseur");
 				 
 				 parentObject.setIng_fournisseur(ing_four);
 			 } else {
@@ -51,9 +51,9 @@ public class SimpleYeastProcessor implements Processor<SimpleLevure> {
 			 
 			 
 
-			 if (request.getAttribute("slev_espece") != null){
+			 if (request.getParameter("slev_espece") != null){
 				 
-				 slev_espece = (String) request.getAttribute("slev_espece");
+				 slev_espece = (String) request.getParameter("slev_espece");
 				 
 				 parentObject.setSlev_espece(slev_espece);
 			 } else {
@@ -61,18 +61,18 @@ public class SimpleYeastProcessor implements Processor<SimpleLevure> {
 			 }
 			 
 
-			 if (request.getAttribute("slev_floculation") != null){
+			 if (request.getParameter("slev_floculation") != null){
 				 
-				 slev_floculation = (String) request.getAttribute("slev_floculation");
+				 slev_floculation = (String) request.getParameter("slev_floculation");
 				 
 				 parentObject.setSlev_floculation(slev_floculation);
 			 } else {
 				 logger.warning("Did not add slev_floculation");
 			 }
 
-			 if (request.getAttribute("slev_aromes") != null){
+			 if (request.getParameter("slev_aromes") != null){
 				 
-				 slev_aromes = (String) request.getAttribute("slev_aromes");
+				 slev_aromes = (String) request.getParameter("slev_aromes");
 				 
 				 parentObject.setSlev_aromes(slev_aromes);
 			 } else {

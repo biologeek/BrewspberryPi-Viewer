@@ -1,6 +1,9 @@
 package net.brewspberry.controller;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -106,22 +109,21 @@ public class IngredientServlet extends HttpServlet {
 			
 		}
 		
-		request.setAttribute("cerealType", Constants.CEREALS);
-		request.setAttribute("ingredientType", ingredientType);
-		
-		// Sets ingredients menu list
-		request.setAttribute("ingredientTypes", Constants.INGREDIENT_TYPES);
-		
+		setConstantsMenus(request);
+
+		request.setAttribute("topSuccess", "0");
+
 		request.getRequestDispatcher("add_update_ingredient.jsp").forward(request, response);
 	}
 
 
 	/**
 	 * doPost is called for processing form data for creating or updating ingredient 
+	 * @throws IOException 
 	 **/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException {
+			HttpServletResponse response) throws ServletException, IOException {
 
 		
 		/*
@@ -130,9 +132,10 @@ public class IngredientServlet extends HttpServlet {
 		
 		AbstractIngredient ingredient = null;
 		String ingredient_id = null;
-		if (request.getAttribute("ingredient_type") != null) {
+		
+		if (request.getParameter("ingredient_type") != null) {
 
-			String ing_type = (String) request.getAttribute("ingredient_type");
+			String ing_type = (String) request.getParameter("ingredient_type");
 			long ing_id = 0;
 			Processor proc;
 			
@@ -146,13 +149,14 @@ public class IngredientServlet extends HttpServlet {
 				proc = new SimpleMaltProcessor();
 				
 				// if returns true, it's an update. Ingredient already exists
-				if (isUpdate(request.getAttribute("ingredient_id"))){
+				if (isUpdate(request.getParameter("ingredient_id"))){
 					
-					ingredient_id = (String) request.getAttribute("ingredient_id");
+					ingredient_id = (String) request.getParameter("ingredient_id");
 					try {
 					
 						ing_id = Long.parseLong(ingredient_id);
 						malt = (SimpleMalt) simpleMaltService.getElementById(ing_id);
+						logger.info("Got a SimpleMalt with ID "+ing_id);
 						
 					} catch (Exception e){
 						
@@ -160,6 +164,8 @@ public class IngredientServlet extends HttpServlet {
 					
 					}
 				}
+
+				logger.info("Recording malt");
 
 				proc.record((SimpleMalt) malt, request);
 				
@@ -169,20 +175,22 @@ public class IngredientServlet extends HttpServlet {
 				proc = new SimpleHopProcessor();
 				
 				// if returns true, it's an update. Ingredient already exists
-				if (isUpdate(request.getAttribute("ingredient_id"))){
+				if (isUpdate(request.getParameter("ingredient_id"))){
 					
-					ingredient_id = (String) request.getAttribute("ingredient_id");
+					ingredient_id = (String) request.getParameter("ingredient_id");
 					try {
 					
 						ing_id = Long.parseLong(ingredient_id);
 						houblon = (SimpleHoublon) simpleHopService.getElementById(ing_id);
-						
+						logger.info("Got a SimpleHoublon with ID "+ing_id);
+
 					} catch (Exception e){
 						
 						logger.severe("Could not convert "+ingredient_id+" to long.");
 					
 					}
 				}
+				logger.info("Recording malt");
 
 				proc.record((SimpleHoublon) ingredient, request);
 
@@ -192,14 +200,15 @@ public class IngredientServlet extends HttpServlet {
 				proc = new SimpleYeastProcessor();
 				
 				// if returns true, it's an update. Ingredient already exists
-				if (isUpdate(request.getAttribute("ingredient_id"))){
+				if (isUpdate(request.getParameter("ingredient_id"))){
 					
-					ingredient_id = (String) request.getAttribute("ingredient_id");
+					ingredient_id = (String) request.getParameter("ingredient_id");
 					try {
 					
 						ing_id = Long.parseLong(ingredient_id);
 						levure = (SimpleLevure) simpleYeastService.getElementById(ing_id);
-						
+						logger.info("Got a SimpleLevure with ID "+ing_id);
+
 					} catch (Exception e){
 						
 						logger.severe("Could not convert "+ingredient_id+" to long.");
@@ -213,7 +222,11 @@ public class IngredientServlet extends HttpServlet {
 			}
 
 		}
-
+		
+		
+		setConstantsMenus(request);
+		request.setAttribute("topSuccess", "1");
+		request.getRequestDispatcher("add_update_ingredient.jsp").forward(request, response);
 	}
 	
 	
@@ -239,5 +252,65 @@ public class IngredientServlet extends HttpServlet {
 		else {
 			return false;
 		}
+	}
+	/**
+	 * Builds HTMl menu options
+	 * 
+	 * @param objectMap Map containing HTML values as Map key and HTML diplay value as Map value 
+	 * @param selectedKey
+	 * @return
+	 */
+	private String buildHTMLMenu (Map<String, String> objectMap, String selectedKey){
+		
+		String result = null;
+		
+		if (objectMap != null){
+			
+			if (!objectMap.isEmpty()){
+				
+				Iterator<Entry<String, String>> it = objectMap.entrySet().iterator();
+				
+				
+				while (it.hasNext()){
+					Entry<String,String> itd = it.next();
+					String selected = "";
+					if (selectedKey.equals(itd.getKey()))
+						selected = "selected=\"selected\"";
+					
+					
+					String newLine = "<option value=\""+itd.getKey()+"\" "+selected+">"+itd.getValue()+"</option>";
+					
+					result = result+newLine;
+				}
+				
+			}
+			
+			
+		}
+		
+		return result;
+	}
+	
+	
+	private void setConstantsMenus (HttpServletRequest request){
+		
+		
+		/*
+		 * Building menus for JS script
+		 */
+		logger.info(String.valueOf(Constants.CEREALS.size()));
+
+		for (Map.Entry<String, String> ent : Constants.CEREALS.entrySet()){
+			
+			logger.info(ent.getKey() + " : "+ent.getValue());
+			
+		}
+
+		// Sets ingredients menu list
+		request.setAttribute("ingredientTypes", Constants.INGREDIENT_TYPES);
+		
+		request.setAttribute("maltSpecificCerealMenuOptions", buildHTMLMenu(Constants.CEREALS, "barley"));
+		request.setAttribute("maltTypeSpecificMenuOptions", buildHTMLMenu(Constants.MALT_TYPE, "blond"));
+		request.setAttribute("hopTypeSpecificMenuOptions", buildHTMLMenu(Constants.HOP_TYPE, "0"));
 	}
 }

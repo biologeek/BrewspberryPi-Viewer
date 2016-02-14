@@ -32,9 +32,9 @@ public class SimpleHopProcessor implements Processor<SimpleHoublon> {
 
 		 if (request != null){
 			 
-			 if (request.getAttribute("ing_description") != null){
+			 if (request.getParameter("ing_description") != null){
 				 
-				 ing_desc = (String) request.getAttribute("ing_description");
+				 ing_desc = (String) request.getParameter("ing_description");
 				 
 				 parentObject.setIng_desc(ing_desc);
 			 } else {
@@ -42,9 +42,9 @@ public class SimpleHopProcessor implements Processor<SimpleHoublon> {
 			 }
 			 
 
-			 if (request.getAttribute("ing_fournisseur") != null){
+			 if (request.getParameter("ing_fournisseur") != null){
 				 
-				 ing_four = (String) request.getAttribute("ing_fournisseur");
+				 ing_four = (String) request.getParameter("ing_fournisseur");
 				 
 				 parentObject.setIng_fournisseur(ing_four);
 			 } else {
@@ -53,9 +53,9 @@ public class SimpleHopProcessor implements Processor<SimpleHoublon> {
 			 
 			 
 
-			 if (request.getAttribute("shbl_variete") != null){
+			 if (request.getParameter("shbl_variete") != null){
 				 
-				 shbl_variete = (String) request.getAttribute("shbl_variete");
+				 shbl_variete = (String) request.getParameter("shbl_variete");
 				 
 				 parentObject.setShbl_variete(shbl_variete);
 			 } else {
@@ -63,27 +63,27 @@ public class SimpleHopProcessor implements Processor<SimpleHoublon> {
 			 }
 			 
 
-			 if (request.getAttribute("shbl_acide_alpha") != null){
+			 if (request.getParameter("shbl_acide_alpha") != null){
 				 
-				 shbl_acide_alpha = Double.parseDouble((String) request.getAttribute("shbl_acide_alpha"));
+				 shbl_acide_alpha = Double.parseDouble((String) request.getParameter("shbl_acide_alpha"));
 				 
 				 parentObject.setShbl_acide_alpha(shbl_acide_alpha);
 			 } else {
 				 logger.warning("Did not add shbl_acide_alpha");
 			 }
 
-			 if (request.getAttribute("shbl_aromes") != null){
+			 if (request.getParameter("shbl_aromes") != null){
 				 
-				 shbl_aromes = (String) request.getAttribute("shbl_aromes");
+				 shbl_aromes = (String) request.getParameter("shbl_aromes");
 				 
 				 parentObject.setShbl_aromes(shbl_aromes);
 			 } else {
 				 logger.warning("Did not add shbl_aromes");
 			 }
 
-			 if (request.getAttribute("shbl_type") != null){
+			 if (request.getParameter("shbl_type") != null){
 				 
-				 shbl_type = Integer.parseInt((String) request.getAttribute("shbl_type"));
+				 shbl_type = Integer.parseInt((String) request.getParameter("shbl_type"));
 				 
 				 parentObject.setShbl_type(shbl_type);
 			 } else {

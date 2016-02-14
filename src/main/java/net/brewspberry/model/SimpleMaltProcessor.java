@@ -23,7 +23,7 @@ public class SimpleMaltProcessor implements Processor<SimpleMalt> {
 	private String ing_four;
 	private String smal_cereale;
 	private String smal_type;
-	private String smal_couleur;
+	private int smal_couleur;
 	
 
 	IGenericService<SimpleMalt> simpleMaltService= (new MaltServiceImpl ()).new SimpleMaltServiceImpl(); 
@@ -39,9 +39,9 @@ public class SimpleMaltProcessor implements Processor<SimpleMalt> {
 		
 		 if (request != null){
 			 
-			 if (request.getAttribute("ing_description") != null){
+			 if (request.getParameter("ing_description") != null){
 				 
-				 ing_desc = (String) request.getAttribute("ing_description");
+				 ing_desc = (String) request.getParameter("ing_description");
 				 
 				 parentObject.setIng_desc(ing_desc);
 			 } else {
@@ -49,41 +49,41 @@ public class SimpleMaltProcessor implements Processor<SimpleMalt> {
 			 }
 			 
 
-			 if (request.getAttribute("ing_fournisseur") != null){
+			 if (request.getParameter("ing_fournisseur") != null){
 				 
-				 ing_four = (String) request.getAttribute("ing_fournisseur");
+				 ing_four = (String) request.getParameter("ing_fournisseur");
 				 
-				 parentObject.setIng_desc(ing_four);
+				 parentObject.setIng_fournisseur(ing_four);
 			 } else {
 				 logger.warning("Did not add ing_four");
 			 }
 			 
 			 
 
-			 if (request.getAttribute("smal_cereale") != null){
+			 if (request.getParameter("smal_cereale") != null){
 				 
-				 smal_cereale = (String) request.getAttribute("smal_cereale");
+				 smal_cereale = (String) request.getParameter("smal_cereale");
 				 
-				 parentObject.setIng_desc(smal_cereale);
+				 parentObject.setSmal_cereale(smal_cereale);
 			 } else {
 				 logger.warning("Did not add smal_cereale");
 			 }
 			 
 
-			 if (request.getAttribute("smal_type") != null){
+			 if (request.getParameter("smal_type") != null){
 				 
-				 smal_type = (String) request.getAttribute("smal_type");
+				 smal_type = (String) request.getParameter("smal_type");
 				 
-				 parentObject.setIng_desc(smal_type);
+				 parentObject.setSmal_type(smal_type);
 			 } else {
 				 logger.warning("Did not add smal_type");
 			 }
 			 
-			 if (request.getAttribute("smal_couleur") != null){
+			 if (request.getParameter("smal_couleur") != null){
 				 
-				 smal_couleur = (String) request.getAttribute("smal_couleur");
+				 smal_couleur = Integer.parseInt((String) request.getParameter("smal_couleur"));
 				 
-				 parentObject.setIng_desc(smal_couleur);
+				 parentObject.setSmal_couleur(smal_couleur);
 			 }
 			 
 
@@ -91,6 +91,8 @@ public class SimpleMaltProcessor implements Processor<SimpleMalt> {
 			 if (parentObject.getIng_id() == 0){
 				 
 				 try {
+					 
+					 logger.info("Saving Malt");
 					simpleMaltService.save(parentObject);
 					return true;
 
@@ -103,7 +105,8 @@ public class SimpleMaltProcessor implements Processor<SimpleMalt> {
 				 				 
 			 }
 			 else if (parentObject.getIng_id() > 0){
-				 
+				 logger.info("Updating Malt");
+
 				 simpleMaltService.update(parentObject);
 				return true;
 

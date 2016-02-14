@@ -27,7 +27,15 @@
 
 <script type="text/javascript">
 
-function changeActionerState(etape, actioner){
+function changeActionerState(etape, actionerUUID){
+	
+	
+	$.ajax({
+		  url: "http://192.168.0.20:8080/brewspberry-viewer/ActionerServlet?type=activate&uuid="+actionerUUID,
+		  context: document.body
+		}).done(function() {
+		  $( this ).addClass( "done" );
+		});
 	
 	
 }
@@ -99,21 +107,14 @@ function changeActionerState(etape, actioner){
 											<tr>
 												<td>
 													<div class="container">
-														<h1 class="title">Dropdown Menu</h1>
-														<ul>
-															<li class="dropdown"><a href="#"
-																data-toggle="dropdown">First Menu <i
-																	class="icon-arrow"></i></a>
-																<ul class="dropdown-menu">
-																	<c:forEach items="${availableActioners}" var="actioner">
-																		<li><a href="#"
-																			onclick="changeActionerState(${evenSteps[loop.index].getEtp_id()},${actioner.getAct_id()});">${actioner.getAct_nom()}</a></li>
-																	</c:forEach>
+														<ul class="dropdown-menu">
+															<c:forEach items="${availableActioners}" var="actioner">
+																<li><a href="#"
+																	onclick="changeActionerState(${evenSteps[loop.index].getEtp_id()}, ${actioner.getAct_uuid()});">${actioner.getAct_nom()}</a></li>
+															</c:forEach>
 
-																</ul></li>
 														</ul>
-													</div> < <img src="images/${actioner.getAct_type()}.png"
-													title="${actioner.getAct_uuid()}" />
+													</div>
 												</td>
 											</tr>
 										</tbody>
@@ -161,22 +162,20 @@ function changeActionerState(etape, actioner){
 													</a></td>
 												</tr>
 
+
+
 												<tr>
-													<td><c:forEach
-															items="${oddSteps[loop.index].getEtp_actioner()}"
-															var="actioner">
-															<c:if test="${actioner.getAct_status() == 10}">
-																<a
-																	href="ActionerServlet?uuid=${actioner.getAct_uuid()}&setStatus=1"><img
-																	src="images/${actioner.getAct_type()}" /></a>
-															</c:if>
-															<!-- status = Stopped -->
-															<c:if test="${actioner.getAct_status() == 1}">
-																<a
-																	href="ActionerServlet?uuid=${actioner.getAct_uuid()}&setStatus=1"><img
-																	src="images/${actioner.getAct_type()}" /></a>
-															</c:if>
-														</c:forEach></td>
+													<td>
+														<div class="container">
+															<ul class="dropdown-menu">
+																<c:forEach items="${availableActioners}" var="actioner">
+																	<li><a href="#"
+																		onclick="changeActionerState(${evenSteps[loop.index].getEtp_id()}, ${actioner.getAct_uuid()});">${actioner.getAct_nom()}</a></li>
+																</c:forEach>
+
+															</ul>
+														</div>
+													</td>
 												</tr>
 											</tbody>
 										</table>
