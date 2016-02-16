@@ -165,7 +165,7 @@ function changeActionerState(etape, actionerUUID){
 
 
 												<tr>
-													<td>
+													<td colspan="4">
 														<div class="container">
 															<ul class="dropdown-menu">
 																<c:forEach items="${availableActioners}" var="actioner">
@@ -247,7 +247,7 @@ function changeActionerState(etape, actionerUUID){
 							<div class="muted pull-left">Profil complet de température</div>
 
 						</div>
-						<a href="${tempServlet}?type=bra&eid=${brassin.getBra_id()}">
+						<a href="${tempServlet}?type=bra&bid=${brassin.getBra_id()}">
 							<img alt="JFreeGraph"
 							src="${tempServlet}?type=bra&bid=${brassin.getBra_id()}"
 							style="height: 300px; width: 7000px; margin: 0 auto; display: block;" />
