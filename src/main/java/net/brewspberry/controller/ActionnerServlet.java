@@ -135,7 +135,7 @@ public class ActionnerServlet extends HttpServlet {
 					try {
 						logger.info("Saving Actioner " + actioner.getAct_uuid());
 						actioner = actionerService.startAction(actioner); // Checked
-						logger.fine("Saved actioner ID : "
+						logger.info("Saved actioner ID : "
 								+ actioner.getAct_id());
 					} catch (Exception e) {
 						e.printStackTrace();

@@ -87,6 +87,11 @@ public class Accueil extends HttpServlet {
 			List<Actioner> availableActioners = new ArrayList<Actioner>();
 			
 			availableActioners = DeviceParser.getInstance().getDevices(Constants.DEVICES_PROPERTIES);
+			for (Actioner act : availableActioners){
+				
+				logger.info("Device : "+act.getAct_nom()+", pin="+act.getAct_raspi_pin()+", uuid="+act.getAct_uuid());
+				
+			}
 			
 			// To display two steps per line
 			Boolean isEven = true;

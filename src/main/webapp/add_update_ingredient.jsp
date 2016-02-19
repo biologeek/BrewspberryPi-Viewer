@@ -226,15 +226,15 @@
 	</script>
 
 <script type="text/javascript">
-
-
+jQuery(document).ready(function(){
+	console.log('Top success : ${topSuccess}');
 	// Adds success field if ingredient is created
-	if (${topSuccess} == 1) {
-		$("#content").append ('<div class="alert alert-success"> \
-		<button type="button" class="close" data-dismiss="alert">&times;</button> \
-       	<h4>Success</h4> \
-   		The operation completed successfully</div>');
+	if (${topSuccess} == '1') {
+		
+		console.log('Prepending content')
+		$('#content').prepend ('<div class=\"alert alert-success\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button><h4>Success</h4>The operation completed successfully</div>');
 	}
+	});
 </script>
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -256,8 +256,8 @@
 		<div class="row-fluid">
 			<jsp:include page="tpl/sidebar.jsp"></jsp:include>
 			<!--/span-->
-			<div class="span9" id="content">
-
+			<div class="span9 main-block" id="content">
+			
 				<div class="block">
 					<div class="navbar navbar-inner block-header">
 						<div class="muted pull-left">Ajouter un brassin</div>
@@ -291,7 +291,8 @@
 
 
 									<div class="control-group">
-										<label class="control-label" for="date01">Description :</label>
+										<label class="control-label" for="date01">Description
+											:</label>
 										<div class="controls">
 
 
@@ -302,7 +303,7 @@
 									</div>
 									<div id="specific-parameters"></div>
 
-	 <br /> <input type="hidden" name="ingredient_id"
+									<br /> <input type="hidden" name="ingredient_id"
 										value="${ingredient_id}" />
 
 									<div class="control-group">

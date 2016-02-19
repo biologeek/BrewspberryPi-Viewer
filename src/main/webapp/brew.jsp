@@ -19,6 +19,8 @@
 <link href="assets/styles.css" rel="stylesheet" media="screen">
 <link href="vendors/jGrowl/jquery.jgrowl.css" rel="stylesheet"
 	media="screen">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,11 +29,13 @@
 
 <script type="text/javascript">
 
+
+		
 function changeActionerState(etape, actionerUUID){
 	
 	
-	$.ajax({
-		  url: "http://192.168.0.20:8080/brewspberry-viewer/ActionerServlet?type=activate&uuid="+actionerUUID,
+	jQuery.ajax({
+		  url: "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=activate&uuid="+actionerUUID,
 		  context: document.body
 		}).done(function() {
 		  $( this ).addClass( "done" );
@@ -79,7 +83,7 @@ function changeActionerState(etape, actionerUUID){
 									</div>
 								</div>
 								<div class="block-content collapse in">
-									<table class="table table-striped">
+									<table class="table table-striped" style="table-layout:fixed;">
 										<thead>
 											<tr>
 												<th>#</th>
@@ -97,24 +101,21 @@ function changeActionerState(etape, actionerUUID){
 											</tr>
 											<tr>
 												<td colspan="4"><a
-													href="${tempServlet}?type=etp&eid=${evenSteps[loop.index].getEtp_id()}">
+													href="${tempServlet}?type=etp&eid=${evenSteps[loop.index].getEtp_id()}&width=300&height=300">
 														<img alt="JFreeGraph"
-														src="${tempServlet}?type=etp&eid=${evenSteps[loop.index].getEtp_id()}"
-														style="height: 250px; width: 500px; margin: 0 auto; display: block;" />
+														src="${tempServlet}?type=etp&eid=${evenSteps[loop.index].getEtp_id()}&width=300&height=300"
+														style="height: 250px; width : 300px; margin: 0 auto; display: block;" />
 												</a></td>
 											</tr>
 
 											<tr>
-												<td>
-													<div class="container">
-														<ul class="dropdown-menu">
+												<td colspan="4">
+														<ul>
 															<c:forEach items="${availableActioners}" var="actioner">
-																<li><a href="#"
-																	onclick="changeActionerState(${evenSteps[loop.index].getEtp_id()}, ${actioner.getAct_uuid()});">${actioner.getAct_nom()}</a></li>
+																<li><a href="#" onclick="changeActionerState('${evenSteps[loop.index].getEtp_id()}','${actioner.getAct_uuid()}')">${actioner.getAct_nom()}</a></li>
 															</c:forEach>
 
 														</ul>
-													</div>
 												</td>
 											</tr>
 										</tbody>
@@ -154,27 +155,21 @@ function changeActionerState(etape, actionerUUID){
 													<td>${oddSteps[loop.index].getEtp_temperature_theorique()}</td>
 												</tr>
 												<tr>
+
 													<td colspan="4"><a
-														href="${tempServlet}?type=etp&eid=${oddSteps[loop.index].getEtp_id()}">
+														href="${tempServlet}?type=etp&eid=${oddSteps[loop.index].getEtp_id()}&width=300&height=300">
 															<img alt="JFreeGraph"
-															src="${tempServlet}?type=etp&eid=${oddSteps[loop.index].getEtp_id()}"
-															style="height: 250px; width: 600px; margin: 0 auto; display: block;" />
+															src="${tempServlet}?type=etp&eid=${oddSteps[loop.index].getEtp_id()}&width=300&height=300"
+															style="height: 250px; width : 300px; margin: 0 auto; display: block;" />
 													</a></td>
 												</tr>
-
-
-
 												<tr>
 													<td colspan="4">
-														<div class="container">
-															<ul class="dropdown-menu">
+															<ul>
 																<c:forEach items="${availableActioners}" var="actioner">
-																	<li><a href="#"
-																		onclick="changeActionerState(${evenSteps[loop.index].getEtp_id()}, ${actioner.getAct_uuid()});">${actioner.getAct_nom()}</a></li>
+																	<li><a href="#"	onclick="changeActionerState('${oddSteps[loop.index].getEtp_id()}','${actioner.getAct_uuid()}')">${actioner.getAct_nom()}</a></li>
 																</c:forEach>
-
 															</ul>
-														</div>
 													</td>
 												</tr>
 											</tbody>
@@ -247,10 +242,11 @@ function changeActionerState(etape, actionerUUID){
 							<div class="muted pull-left">Profil complet de température</div>
 
 						</div>
-						<a href="${tempServlet}?type=bra&bid=${brassin.getBra_id()}">
+						<a
+							href="${tempServlet}?type=bra&bid=${brassin.getBra_id()}&width=900&height=300">
 							<img alt="JFreeGraph"
-							src="${tempServlet}?type=bra&bid=${brassin.getBra_id()}"
-							style="height: 300px; width: 7000px; margin: 0 auto; display: block;" />
+							src="${tempServlet}?type=bra&bid=${brassin.getBra_id()}&width=900&height=300"
+							style="height: 300px; width: 900px; margin: 0 auto; display: block;" />
 						</a>
 
 					</div>
