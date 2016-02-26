@@ -16,8 +16,10 @@ import net.brewspberry.business.IGenericService;
 import net.brewspberry.business.ISpecificActionerService;
 import net.brewspberry.business.beans.Actioner;
 import net.brewspberry.business.beans.Brassin;
+import net.brewspberry.business.beans.Etape;
 import net.brewspberry.business.service.ActionerServiceImpl;
 import net.brewspberry.business.service.BrassinServiceImpl;
+import net.brewspberry.business.service.EtapeServiceImpl;
 import net.brewspberry.exceptions.DAOException;
 import net.brewspberry.util.Constants;
 import net.brewspberry.util.DeviceParser;
@@ -28,19 +30,24 @@ import net.brewspberry.util.LogManager;
  */
 @WebServlet("/Actionner")
 public class ActionnerServlet extends HttpServlet {
-	
+
 	/**
-	 * This servlet allows user to either activate, deactivate or use features of actionners
+	 * This servlet allows user to either activate, deactivate or use features
+	 * of actionners
 	 */
 	private static final long serialVersionUID = 1L;
 	private ISpecificActionerService actionerService = new ActionerServiceImpl();
 	private ActionerServiceImpl genActionerService = new ActionerServiceImpl();
 
-	private BrassinServiceImpl brassinService = new BrassinServiceImpl();
+	private IGenericService<Brassin> brassinService = new BrassinServiceImpl();
+	private IGenericService<Etape> etapeService = new EtapeServiceImpl();
 	static Logger logger = LogManager.getInstance(ActionnerServlet.class
 			.toString());
 
 	List<Actioner> actioners = new ArrayList<Actioner>();
+
+	Brassin currentBrew = null;
+	private Etape currentStep = null;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -50,21 +57,31 @@ public class ActionnerServlet extends HttpServlet {
 	}
 
 	/**
-	 * @throws IOException 
-	 * @throws ServletException 
+	 * @throws IOException
+	 * @throws ServletException
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		long id = 0;
-
 		if (request.getParameter("bid") != null) {
 
 			try {
-				id = Long.parseLong(request.getParameter("bid"));
-				brassinService.getElementById(id);
+				long id = Long.parseLong(request.getParameter("bid"));
+				currentBrew = brassinService.getElementById(id);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		if (request.getParameter("eid") != null) {
+
+			try {
+				long etp_id = Long.parseLong(request.getParameter("eid"));
+				currentStep = etapeService.getElementById(etp_id);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -91,9 +108,8 @@ public class ActionnerServlet extends HttpServlet {
 
 				for (Actioner actioner : actioners) {
 
-					logger.log(Level.FINE,
+					logger.log(Level.INFO,
 							"Nom de l'actionner : " + actioner.getAct_nom());
-
 				}
 
 				request.setAttribute("actioners", actioners);
@@ -115,10 +131,10 @@ public class ActionnerServlet extends HttpServlet {
 				 * temperatures or chaging the state of a relay (starting the
 				 * pump, ...)
 				 * 
-				 * Programatically, - Select device in device.properties
-				 * (thinking of JSON or XML instead of properties...) - Change
-				 * its status - Save it in database - Get the ID and update
-				 * properties file
+				 * Programatically, - Select parametered device in device.properties
+				 * (thinking of JSON or XML instead of properties...) 
+				 * - Change its status 
+				 * - Save it in database
 				 */
 
 				String uuid = null;
@@ -126,34 +142,45 @@ public class ActionnerServlet extends HttpServlet {
 				if (request.getParameter("uuid") != null) {
 
 					uuid = request.getParameter("uuid");
+					
+					// Getting device by UUID
 
 					actioner = DeviceParser.getInstance().getDeviceByUUID(
 							Constants.DEVICES_PROPERTIES, uuid);
 
-					actioner.setAct_activated(true);
+					
+					// If launched in record mode, check if brew and step are filled
+					if (currentBrew != null && currentStep != null) {
+						
+						
+						actioner.setAct_brassin(currentBrew);
+						actioner.setAct_etape(currentStep);
+						actioner.setAct_activated(false); //@see ActionerServiceImpl.startActionInDatabase
 
-					try {
-						logger.info("Saving Actioner " + actioner.getAct_uuid());
-						actioner = actionerService.startAction(actioner); // Checked
-						logger.info("Saved actioner ID : "
-								+ actioner.getAct_id());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-					if (actioner.getAct_id() != 0) {
+						
 						try {
-							logger.info("Trying to set ID to actioner in devices.properties");
-							DeviceParser.getInstance()
-									.setIdToActioner(actioner);
-						} catch (Exception e) { 
+							logger.info("Saving Actioner "
+									+ actioner.getAct_uuid());
+							actioner = actionerService.startAction(actioner); // Checked
+							logger.info("Saved actioner ID : "
+									+ actioner.getAct_id());
+						} catch (Exception e) {
 							e.printStackTrace();
-
 						}
-					} else {
-						logger.info("Arf shit ! actioner has id=0");
 					}
-
+					
+					/*
+					 * 
+					 * New business rule : No more updating in props file
+					 * 
+					 * if (actioner.getAct_id() != 0) { try { logger.info(
+					 * "Trying to set ID to actioner in devices.properties");
+					 * DeviceParser.getInstance() .setIdToActioner(actioner); }
+					 * catch (Exception e) { e.printStackTrace();
+					 * 
+					 * } } else { logger.info("Arf shit ! actioner has id=0"); }
+					 */
+					
 					/*
 					 * // Start action if type=ds18b20 if
 					 * (actioner.getAct_type().equals(Constants.ACT_DS18B20)) {
@@ -165,6 +192,12 @@ public class ActionnerServlet extends HttpServlet {
 					actioners = DeviceParser.getInstance().getDevices(
 							Constants.DEVICES_PROPERTIES);
 
+					// Update actioner ID if exists in DB
+					for (Actioner act : actioners){
+
+						act = actionerService.isAlreadyStoredAndActivated (act);
+						
+					}
 					// Returning actioners to page
 
 					request.setAttribute("actioners", actioners);
@@ -177,15 +210,20 @@ public class ActionnerServlet extends HttpServlet {
 
 				logger.info("Entering actioner deactivation");
 
-				String duuid = null;
+				long did = 0;
 				Actioner dactioner = new Actioner();
-				if (request.getParameter("uuid") != null) {
+				if (request.getParameter("id") != null) {
 
-					duuid = request.getParameter("uuid");
-
-					dactioner = DeviceParser.getInstance().getDeviceByUUID(
-							Constants.DEVICES_PROPERTIES, duuid);
-
+					try {
+						did = Long.parseLong(request.getParameter("id"));
+					} catch (Exception e){
+						
+						logger.severe("Could not convert actioner ID to long");
+					}
+					
+					
+					dactioner = genActionerService.getElementById(did);
+					
 					if (dactioner.getAct_id() != 0) {
 
 						try {
@@ -216,10 +254,11 @@ public class ActionnerServlet extends HttpServlet {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}
-						else {
+						} else {
 							try {
-								throw new Exception ("Could not found ID for UUID"+dactioner.getAct_uuid());
+								throw new Exception(
+										"Could not found ID for UUID"
+												+ dactioner.getAct_uuid());
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();

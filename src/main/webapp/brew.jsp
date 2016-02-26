@@ -31,16 +31,28 @@
 
 
 		
-function changeActionerState(etape, actionerUUID){
+function changeActionerState(brew, step, actionerUUID, actionerID){
 	
-	
-	jQuery.ajax({
-		  url: "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=activate&uuid="+actionerUUID,
-		  context: document.body
-		}).done(function() {
-		  $( this ).addClass( "done" );
-		});
-	
+	if (brew != null && step != null){
+
+		if (actionerID > 0){
+			
+			jQuery.ajax({
+				  url: "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=deactivate&id="+actionerUUID+"&bid="+brew+"&eid="+step,
+				  context: document.body
+				}).done(function() {
+				  $( this ).addClass( "done" );
+				});
+			
+		}
+		jQuery.ajax({
+			  url: "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=activate&uuid="+actionerUUID+"&bid="+brew+"&eid="+step,
+			  context: document.body
+			}).done(function() {
+			  $( this ).addClass( "done" );
+			});
+			
+	}
 	
 }
 </script>
@@ -112,7 +124,7 @@ function changeActionerState(etape, actionerUUID){
 												<td colspan="4">
 														<ul>
 															<c:forEach items="${availableActioners}" var="actioner">
-																<li><a href="#" onclick="changeActionerState('${evenSteps[loop.index].getEtp_id()}','${actioner.getAct_uuid()}')">${actioner.getAct_nom()}</a></li>
+																<li><a href="#" onclick="changeActionerState('${evenSteps[loop.index].getEtp_brassin().getBra_id()}', '${evenSteps[loop.index].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a></li>
 															</c:forEach>
 
 														</ul>
