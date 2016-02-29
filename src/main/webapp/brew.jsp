@@ -80,9 +80,8 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 				</div>
 
 				<!-- Loop over each step -->
-				<c:set var="count" value="0" scope="page" />
 
-				<c:forEach items="${evenSteps}" varStatus="loop">
+				<c:forEach begin="0" end="${steps.size()}" var="loop">
 					<div class="row-fluid">
 						<div class="span6">
 							<!-- block -->
@@ -90,7 +89,7 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 								<div class="navbar navbar-inner block-header">
 									<div class="muted pull-left">Etape</div>
 									<div class="pull-right">
-										<span class="badge badge-info">${evenSteps[loop.index].getEtp_numero()}</span>
+										<span class="badge badge-info">${steps[loop].getEtp_numero()}</span>
 
 									</div>
 								</div>
@@ -106,16 +105,16 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 										</thead>
 										<tbody>
 											<tr>
-												<td>${evenSteps[loop.index].getEtp_numero()}</td>
-												<td>${evenSteps[loop.index].getEtp_nom()}</td>
-												<td>${evenSteps[loop.index].getEtp_duree()}</td>
-												<td>${evenSteps[loop.index].getEtp_temperature_theorique()}</td>
+												<td>${steps[loop].getEtp_numero()}</td>
+												<td>${steps[loop].getEtp_nom()}</td>
+												<td>${steps[loop].getEtp_duree()}</td>
+												<td>${steps[loop].getEtp_temperature_theorique()}</td>
 											</tr>
 											<tr>
 												<td colspan="4"><a
-													href="${tempServlet}?type=etp&eid=${evenSteps[loop.index].getEtp_id()}&width=300&height=300">
+													href="${tempServlet}?type=etp&eid=${steps[loop].getEtp_id()}&width=300&height=300">
 														<img alt="JFreeGraph"
-														src="${tempServlet}?type=etp&eid=${evenSteps[loop.index].getEtp_id()}&width=300&height=300"
+														src="${tempServlet}?type=etp&eid=${steps[loop].getEtp_id()}&width=300&height=300"
 														style="height: 250px; width : 300px; margin: 0 auto; display: block;" />
 												</a></td>
 											</tr>
@@ -124,7 +123,7 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 												<td colspan="4">
 														<ul>
 															<c:forEach items="${availableActioners}" var="actioner">
-																<li><a href="#" onclick="changeActionerState('${evenSteps[loop.index].getEtp_brassin().getBra_id()}', '${evenSteps[loop.index].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a></li>
+																<li><a href="#" onclick="changeActionerState('${steps[loop].getEtp_brassin().getBra_id()}', '${steps[loop].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a></li>
 															</c:forEach>
 
 														</ul>
@@ -138,14 +137,14 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 						</div>
 
 						<c:if
-							test="${evenSteps.size() == oddSteps.size() && loop.index <= (evenSteps.size()+ oddSteps.size())}">
+							test="${loop <= steps.size() - 1}">
 							<div class="span6">
 								<!-- block -->
 								<div class="block">
 									<div class="navbar navbar-inner block-header">
 										<div class="muted pull-left">Etape</div>
 										<div class="pull-right">
-											<span class="badge badge-info">${oddSteps[loop.index].getEtp_numero()}</span>
+											<span class="badge badge-info">${steps[loop+1].getEtp_numero()}</span>
 
 										</div>
 									</div>
@@ -161,17 +160,17 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 											</thead>
 											<tbody>
 												<tr>
-													<td>${oddSteps[loop.index].getEtp_numero()}</td>
-													<td>${oddSteps[loop.index].getEtp_nom()}</td>
-													<td>${oddSteps[loop.index].getEtp_duree()}</td>
-													<td>${oddSteps[loop.index].getEtp_temperature_theorique()}</td>
+													<td>${steps[loop+1].getEtp_numero()}</td>
+													<td>${steps[loop+1].getEtp_nom()}</td>
+													<td>${steps[loop+1].getEtp_duree()}</td>
+													<td>${steps[loop+1].getEtp_temperature_theorique()}</td>
 												</tr>
 												<tr>
 
 													<td colspan="4"><a
-														href="${tempServlet}?type=etp&eid=${oddSteps[loop.index].getEtp_id()}&width=300&height=300">
+														href="${tempServlet}?type=etp&eid=${steps[loop+1].getEtp_id()}&width=300&height=300">
 															<img alt="JFreeGraph"
-															src="${tempServlet}?type=etp&eid=${oddSteps[loop.index].getEtp_id()}&width=300&height=300"
+															src="${tempServlet}?type=etp&eid=${steps[loop+1].getEtp_id()}&width=300&height=300"
 															style="height: 250px; width : 300px; margin: 0 auto; display: block;" />
 													</a></td>
 												</tr>
@@ -179,7 +178,7 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 													<td colspan="4">
 															<ul>
 																<c:forEach items="${availableActioners}" var="actioner">
-																	<li><a href="#"	onclick="changeActionerState('${oddSteps[loop.index].getEtp_id()}','${actioner.getAct_uuid()}')">${actioner.getAct_nom()}</a></li>
+																	<li><a href="#"	onclick="changeActionerState('${steps[loop+1].getEtp_id()}','${actioner.getAct_uuid()}')">${actioner.getAct_nom()}</a></li>
 																</c:forEach>
 															</ul>
 													</td>
@@ -193,7 +192,7 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 							</div>
 						</c:if>
 					</div>
-					<c:set var="count" value="${count + 1}" scope="page" />
+					<c:set var="loop" value="${loop+1}"></c:set>
 				</c:forEach>
 				<div class="row-fluid">
 
@@ -202,12 +201,12 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 						<div class="navbar navbar-inner block-header">
 							<div class="muted pull-left">Ajouter une étape</div>
 							<div class="pull-right">
-								<span class="badge badge-info">${evenSteps.size() + oddSteps.size()}</span>
+								<span class="badge badge-info">${steps.size()}</span>
 
 							</div>
 						</div>
 						<div class="block-content collapse in">
-							<form action="AddOrUpdateBrew?typeOfAdding=step"
+							<form action="AddOrUpdateBrew?typeOfAdding=step&bid=${brassin.getBra_id()}"
 								class="form-horizontal" method="post">
 								<table class="table table-striped">
 									<tbody>
@@ -228,7 +227,7 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 										<tr>
 											<td>Etape n°</td>
 											<td><input type="text" name="step_number"
-												value="${evenSteps.size() + oddSteps.size()}" /></td>
+												value="${steps.size()}" /></td>
 											<td></td>
 											<td></td>
 											<td>

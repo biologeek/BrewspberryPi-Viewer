@@ -194,7 +194,7 @@ public class AddOrUpdateBrew extends HttpServlet {
 					/*
 					 * Updating
 					 */
-					logger.info("Updating brew whit ID : "
+					logger.info("Updating brew with ID : "
 							+ request.getAttribute("brassinID"));
 					try {
 						Brassin currentBrew = brassinService
@@ -223,12 +223,15 @@ public class AddOrUpdateBrew extends HttpServlet {
 
 				Processor<Object> stepProc = new StepProcessor();
 				Etape currentStep = null;
+				
 
 				String stepID = (String) request.getAttribute("step_id");
 
+				
+				
 				if (stepID != null) {
-					//Updating step
-					
+					// Updating step
+
 					try {
 						currentStep = etapeService.getElementById(Long
 								.parseLong(stepID));
@@ -244,8 +247,18 @@ public class AddOrUpdateBrew extends HttpServlet {
 					}
 				} else {
 
-					stepProc.record(currentBrassin, request);				
-					
+					if (request.getParameter("bid") != null){
+						
+						try {
+							
+							currentBrassin = brassinService.getElementById(Long.parseLong(request.getParameter("bid")));
+						} catch (Exception e){
+							e.printStackTrace();
+						}
+						
+					}
+					stepProc.record(currentBrassin, request);
+
 				}
 
 				break;
@@ -253,10 +266,9 @@ public class AddOrUpdateBrew extends HttpServlet {
 
 		}
 
-		request.setAttribute("bid", currentBrassin.getBra_id());
 		// TODO : rediriger vers la 2 ème page. En attendant, on affiche le
 		// brassin
-		request.getRequestDispatcher("brew.jsp").forward(request, response);
+		response.sendRedirect("Accueil?bid="+currentBrassin.getBra_id());
 
 	}
 

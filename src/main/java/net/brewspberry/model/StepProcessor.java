@@ -53,9 +53,10 @@ public class StepProcessor implements Processor<Object> {
 		Etape currentStep = new Etape();
 
 		if (parent instanceof Etape) {
-			
+
 			/*
-			 * If parent object parameter is Etape, parent brew is already attached
+			 * If parent object parameter is Etape, parent brew is already
+			 * attached
 			 */
 
 			currentStep = (Etape) parent;
@@ -67,9 +68,11 @@ public class StepProcessor implements Processor<Object> {
 			 * else, we're creating a new Step, it's necesary to attach brew
 			 */
 			Brassin parentBrew = (Brassin) parent;
-			
+
 			// Attaching brew to step
-			if (parent != null && parentBrew.getBra_id() != null) {
+			if (parent != null && parentBrew.getBra_id() != null && !parentBrew.getBra_id().equals(new Brassin())) {
+				
+				logger.info("Attaching to brew "+parentBrew);
 				currentStep.setEtp_brassin(parentBrew);
 			}
 
@@ -184,9 +187,12 @@ public class StepProcessor implements Processor<Object> {
 
 		// Enregistrement de l'étape
 		try {
-			if (currentStep.getEtp_id() > 0) {
-				currentStep = etapeService.update(currentStep);
-				logger.info("Updating Step with ID " + currentStep.getEtp_id());
+			if (currentStep.getEtp_id() != null) {
+				if (currentStep.getEtp_id() > 0) {
+					currentStep = etapeService.update(currentStep);
+					logger.info("Updating Step with ID "
+							+ currentStep.getEtp_id());
+				}
 			} else {
 				currentStep = etapeService.save(currentStep);
 				logger.info("Saving Step with ID " + currentStep.getEtp_id());

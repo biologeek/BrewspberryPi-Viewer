@@ -80,10 +80,6 @@ public class Accueil extends HttpServlet {
 			
 			System.out.println(currentBrew.getBra_etapes());
 			
-			List<Etape> oddSteps = new ArrayList<Etape>();
-			List<Etape> evenSteps = new ArrayList<Etape>();
-			
-			
 			List<Actioner> availableActioners = new ArrayList<Actioner>();
 			
 			availableActioners = DeviceParser.getInstance().getDevices(Constants.DEVICES_PROPERTIES);
@@ -93,20 +89,7 @@ public class Accueil extends HttpServlet {
 				
 			}
 			
-			// To display two steps per line
-			Boolean isEven = true;
-			for (Etape step : currentBrew.getBra_etapes()){
-				if (isEven){
-					evenSteps.add(step);
-					isEven = false;
-				}
-				else {
-					oddSteps.add(step);
-					isEven=false;
-				}
-			}
-			request.setAttribute("oddSteps", oddSteps);
-			request.setAttribute("evenSteps", evenSteps);
+			request.setAttribute("steps", currentBrew.getBra_etapes());
 			request.setAttribute("availableActioners", availableActioners);
 			request.setAttribute("tempServlet", ConfigLoader.getConfigByKey(Constants.CONFIG_PROPERTIES, "servlets.temperature.graph"));
 
