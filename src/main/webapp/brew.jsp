@@ -81,7 +81,8 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 
 				<!-- Loop over each step -->
 
-				<c:forEach begin="0" end="${steps.size()}" var="loop">
+				<c:forEach begin="0" end="${steps.size()/2-1}" var="loop">
+
 					<div class="row-fluid">
 						<div class="span6">
 							<!-- block -->
@@ -89,7 +90,7 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 								<div class="navbar navbar-inner block-header">
 									<div class="muted pull-left">Etape</div>
 									<div class="pull-right">
-										<span class="badge badge-info">${steps[loop].getEtp_numero()}</span>
+										<span class="badge badge-info">${steps[loop*2].getEtp_numero()}</span>
 
 									</div>
 								</div>
@@ -105,16 +106,16 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 										</thead>
 										<tbody>
 											<tr>
-												<td>${steps[loop].getEtp_numero()}</td>
-												<td>${steps[loop].getEtp_nom()}</td>
-												<td>${steps[loop].getEtp_duree()}</td>
-												<td>${steps[loop].getEtp_temperature_theorique()}</td>
+												<td>${steps[loop*2].getEtp_numero()}</td>
+												<td>${steps[loop*2].getEtp_nom()}</td>
+												<td>${steps[loop*2].getEtp_duree()}</td>
+												<td>${steps[loop*2].getEtp_temperature_theorique()}</td>
 											</tr>
 											<tr>
 												<td colspan="4"><a
-													href="${tempServlet}?type=etp&eid=${steps[loop].getEtp_id()}&width=300&height=300">
+													href="${tempServlet}?type=etp&eid=${steps[loop*2].getEtp_id()}&width=300&height=300">
 														<img alt="JFreeGraph"
-														src="${tempServlet}?type=etp&eid=${steps[loop].getEtp_id()}&width=300&height=300"
+														src="${tempServlet}?type=etp&eid=${steps[loop*2].getEtp_id()}&width=300&height=300"
 														style="height: 250px; width : 300px; margin: 0 auto; display: block;" />
 												</a></td>
 											</tr>
@@ -123,7 +124,7 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 												<td colspan="4">
 														<ul>
 															<c:forEach items="${availableActioners}" var="actioner">
-																<li><a href="#" onclick="changeActionerState('${steps[loop].getEtp_brassin().getBra_id()}', '${steps[loop].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a></li>
+																<li><a href="#" onclick="changeActionerState('${steps[loop*2].getEtp_brassin().getBra_id()}', '${steps[loop*2].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a></li>
 															</c:forEach>
 
 														</ul>
@@ -135,16 +136,15 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 							</div>
 							<!-- /block -->
 						</div>
-
 						<c:if
-							test="${loop <= steps.size() - 1}">
+							test="${loop*2 <= steps.size() - 1}">
 							<div class="span6">
 								<!-- block -->
 								<div class="block">
 									<div class="navbar navbar-inner block-header">
 										<div class="muted pull-left">Etape</div>
 										<div class="pull-right">
-											<span class="badge badge-info">${steps[loop+1].getEtp_numero()}</span>
+											<span class="badge badge-info">${steps[loop*2+1].getEtp_numero()}</span>
 
 										</div>
 									</div>
@@ -160,17 +160,17 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 											</thead>
 											<tbody>
 												<tr>
-													<td>${steps[loop+1].getEtp_numero()}</td>
-													<td>${steps[loop+1].getEtp_nom()}</td>
-													<td>${steps[loop+1].getEtp_duree()}</td>
-													<td>${steps[loop+1].getEtp_temperature_theorique()}</td>
+													<td>${steps[loop*2+1].getEtp_numero()}</td>
+													<td>${steps[loop*2+1].getEtp_nom()}</td>
+													<td>${steps[loop*2+1].getEtp_duree()}</td>
+													<td>${steps[loop*2+1].getEtp_temperature_theorique()}</td>
 												</tr>
 												<tr>
 
 													<td colspan="4"><a
-														href="${tempServlet}?type=etp&eid=${steps[loop+1].getEtp_id()}&width=300&height=300">
+														href="${tempServlet}?type=etp&eid=${steps[loop*2+1].getEtp_id()}&width=300&height=300">
 															<img alt="JFreeGraph"
-															src="${tempServlet}?type=etp&eid=${steps[loop+1].getEtp_id()}&width=300&height=300"
+															src="${tempServlet}?type=etp&eid=${steps[loop*2+1].getEtp_id()}&width=300&height=300"
 															style="height: 250px; width : 300px; margin: 0 auto; display: block;" />
 													</a></td>
 												</tr>
@@ -178,7 +178,7 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 													<td colspan="4">
 															<ul>
 																<c:forEach items="${availableActioners}" var="actioner">
-																	<li><a href="#"	onclick="changeActionerState('${steps[loop+1].getEtp_id()}','${actioner.getAct_uuid()}')">${actioner.getAct_nom()}</a></li>
+																	<li><a href="#"	onclick="changeActionerState('${steps[loop*2+1].getEtp_id()}','${actioner.getAct_uuid()}')">${actioner.getAct_nom()}</a></li>
 																</c:forEach>
 															</ul>
 													</td>

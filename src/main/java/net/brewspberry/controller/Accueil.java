@@ -89,6 +89,11 @@ public class Accueil extends HttpServlet {
 				
 			}
 			
+			for (Etape step : currentBrew.getBra_etapes()){
+				
+				logger.info("||" + step.getEtp_nom()+ " "+ step.getEtp_id()+ " "+ step.getEtp_numero());
+				
+			}
 			request.setAttribute("steps", currentBrew.getBra_etapes());
 			request.setAttribute("availableActioners", availableActioners);
 			request.setAttribute("tempServlet", ConfigLoader.getConfigByKey(Constants.CONFIG_PROPERTIES, "servlets.temperature.graph"));
