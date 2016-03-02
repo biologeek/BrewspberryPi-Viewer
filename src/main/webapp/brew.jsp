@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="net.brewspberry.business.beans.Brassin"%>
+<%@page import="java.lang.Math"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
@@ -19,8 +20,9 @@
 <link href="assets/styles.css" rel="stylesheet" media="screen">
 <link href="vendors/jGrowl/jquery.jgrowl.css" rel="stylesheet"
 	media="screen">
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -28,33 +30,42 @@
 <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
 <script type="text/javascript">
+	function changeActionerState(brew, step, actionerUUID, actionerID) {
 
+		if (brew != null && step != null) {
 
-		
-function changeActionerState(brew, step, actionerUUID, actionerID){
-	
-	if (brew != null && step != null){
+			if (actionerID > 0) {
 
-		if (actionerID > 0){
-			
-			jQuery.ajax({
-				  url: "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=deactivate&id="+actionerUUID+"&bid="+brew+"&eid="+step,
-				  context: document.body
-				}).done(function() {
-				  $( this ).addClass( "done" );
-				});
-			
+				jQuery
+						.ajax(
+								{
+									url : "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=deactivate&id="
+											+ actionerUUID
+											+ "&bid="
+											+ brew
+											+ "&eid=" + step,
+									context : document.body
+								}).done(function() {
+							$(this).addClass("done");
+						});
+
+			}
+			jQuery
+					.ajax(
+							{
+								url : "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=activate&uuid="
+										+ actionerUUID
+										+ "&bid="
+										+ brew
+										+ "&eid=" + step,
+								context : document.body
+							}).done(function() {
+						$(this).addClass("done");
+					});
+
 		}
-		jQuery.ajax({
-			  url: "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=activate&uuid="+actionerUUID+"&bid="+brew+"&eid="+step,
-			  context: document.body
-			}).done(function() {
-			  $( this ).addClass( "done" );
-			});
-			
+
 	}
-	
-}
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Brassin n°${brassin.getBra_id()}</title>
@@ -81,75 +92,22 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 
 				<!-- Loop over each step -->
 
-				<c:forEach begin="0" end="${steps.size()/2-1}" var="loop">
-
-					<div class="row-fluid">
-						<div class="span6">
-							<!-- block -->
-							<div class="block">
-								<div class="navbar navbar-inner block-header">
-									<div class="muted pull-left">Etape</div>
-									<div class="pull-right">
-										<span class="badge badge-info">${steps[loop*2].getEtp_numero()}</span>
-
-									</div>
-								</div>
-								<div class="block-content collapse in">
-									<table class="table table-striped" style="table-layout:fixed;">
-										<thead>
-											<tr>
-												<th>#</th>
-												<th>Label</th>
-												<th>Durée</th>
-												<th>Température</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>${steps[loop*2].getEtp_numero()}</td>
-												<td>${steps[loop*2].getEtp_nom()}</td>
-												<td>${steps[loop*2].getEtp_duree()}</td>
-												<td>${steps[loop*2].getEtp_temperature_theorique()}</td>
-											</tr>
-											<tr>
-												<td colspan="4"><a
-													href="${tempServlet}?type=etp&eid=${steps[loop*2].getEtp_id()}&width=300&height=300">
-														<img alt="JFreeGraph"
-														src="${tempServlet}?type=etp&eid=${steps[loop*2].getEtp_id()}&width=300&height=300"
-														style="height: 250px; width : 300px; margin: 0 auto; display: block;" />
-												</a></td>
-											</tr>
-
-											<tr>
-												<td colspan="4">
-														<ul>
-															<c:forEach items="${availableActioners}" var="actioner">
-																<li><a href="#" onclick="changeActionerState('${steps[loop*2].getEtp_brassin().getBra_id()}', '${steps[loop*2].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a></li>
-															</c:forEach>
-
-														</ul>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-							<!-- /block -->
-						</div>
-						<c:if
-							test="${loop*2 <= steps.size() - 1}">
+				<c:forEach begin="0" end="${stepCounter}" var="loop">
+					<c:if test="${steps[loop*2].getEtp_id() != null}">
+						<div class="row-fluid">
 							<div class="span6">
 								<!-- block -->
 								<div class="block">
 									<div class="navbar navbar-inner block-header">
 										<div class="muted pull-left">Etape</div>
 										<div class="pull-right">
-											<span class="badge badge-info">${steps[loop*2+1].getEtp_numero()}</span>
+											<span class="badge badge-info">${steps[loop*2].getEtp_numero()}</span>
 
 										</div>
 									</div>
 									<div class="block-content collapse in">
-										<table class="table table-striped">
+										<table class="table table-striped"
+											style="table-layout: fixed;">
 											<thead>
 												<tr>
 													<th>#</th>
@@ -160,39 +118,88 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 											</thead>
 											<tbody>
 												<tr>
-													<td>${steps[loop*2+1].getEtp_numero()}</td>
-													<td>${steps[loop*2+1].getEtp_nom()}</td>
-													<td>${steps[loop*2+1].getEtp_duree()}</td>
-													<td>${steps[loop*2+1].getEtp_temperature_theorique()}</td>
+													<td>${steps[loop*2].getEtp_numero()}</td>
+													<td>${steps[loop*2].getEtp_nom()}</td>
+													<td>${steps[loop*2].getEtp_duree()}</td>
+													<td>${steps[loop*2].getEtp_temperature_theorique()}</td>
 												</tr>
 												<tr>
-
 													<td colspan="4"><a
-														href="${tempServlet}?type=etp&eid=${steps[loop*2+1].getEtp_id()}&width=300&height=300">
+														href="${tempServlet}?type=etp&eid=${steps[loop*2].getEtp_id()}&width=300&height=300">
 															<img alt="JFreeGraph"
-															src="${tempServlet}?type=etp&eid=${steps[loop*2+1].getEtp_id()}&width=300&height=300"
-															style="height: 250px; width : 300px; margin: 0 auto; display: block;" />
+															src="${tempServlet}?type=etp&eid=${steps[loop*2].getEtp_id()}&width=300&height=300"
+															style="height: 250px; width: 300px; margin: 0 auto; display: block;" />
 													</a></td>
 												</tr>
+
 												<tr>
-													<td colspan="4">
-															<ul>
-																<c:forEach items="${availableActioners}" var="actioner">
-																	<li><a href="#"	onclick="changeActionerState('${steps[loop*2+1].getEtp_id()}','${actioner.getAct_uuid()}')">${actioner.getAct_nom()}</a></li>
-																</c:forEach>
-															</ul>
-													</td>
+													<td colspan="4"><c:forEach
+															items="${availableActioners}" var="actioner">
+															<a href="#"
+																onclick="changeActionerState('${steps[loop*2].getEtp_brassin().getBra_id()}','${steps[loop*2].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a>
+														</c:forEach></td>
 												</tr>
 											</tbody>
 										</table>
 									</div>
-
 								</div>
 								<!-- /block -->
 							</div>
-						</c:if>
-					</div>
-					<c:set var="loop" value="${loop+1}"></c:set>
+							<c:if test="${loop*2+1 < steps.size()}">
+								<div class="span6">
+									<!-- block -->
+									<div class="block">
+										<div class="navbar navbar-inner block-header">
+											<div class="muted pull-left">Etape</div>
+											<div class="pull-right">
+												<span class="badge badge-info">${steps[loop*2+1].getEtp_numero()}</span>
+
+											</div>
+										</div>
+										<div class="block-content collapse in">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th>#</th>
+														<th>Label</th>
+														<th>Durée</th>
+														<th>Température</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>${steps[loop*2+1].getEtp_numero()}</td>
+														<td>${steps[loop*2+1].getEtp_nom()}</td>
+														<td>${steps[loop*2+1].getEtp_duree()}</td>
+														<td>${steps[loop*2+1].getEtp_temperature_theorique()}</td>
+													</tr>
+													<tr>
+
+														<td colspan="4"><a
+															href="${tempServlet}?type=etp&eid=${steps[loop*2+1].getEtp_id()}&width=300&height=300">
+																<img alt="JFreeGraph"
+																src="${tempServlet}?type=etp&eid=${steps[loop*2+1].getEtp_id()}&width=300&height=300"
+																style="height: 250px; width: 300px; margin: 0 auto; display: block;" />
+														</a></td>
+													</tr>
+													<tr>
+														<td colspan="4"><c:forEach
+																items="${availableActioners}" var="actioner">
+																<a href="#"
+																	onclick="changeActionerState('${steps[loop*2+1].getEtp_brassin().getBra_id()}','${steps[loop*2+1].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a>
+															</c:forEach></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+
+									</div>
+									<!-- /block -->
+								</div>
+							</c:if>
+						</div>
+						<c:set var="loop" value="${loop+1}"></c:set>
+					</c:if>
 				</c:forEach>
 				<div class="row-fluid">
 
@@ -206,7 +213,8 @@ function changeActionerState(brew, step, actionerUUID, actionerID){
 							</div>
 						</div>
 						<div class="block-content collapse in">
-							<form action="AddOrUpdateBrew?typeOfAdding=step&bid=${brassin.getBra_id()}"
+							<form
+								action="AddOrUpdateBrew?typeOfAdding=step&bid=${brassin.getBra_id()}"
 								class="form-horizontal" method="post">
 								<table class="table table-striped">
 									<tbody>

@@ -94,6 +94,8 @@ public class Accueil extends HttpServlet {
 				logger.info("||" + step.getEtp_nom()+ " "+ step.getEtp_id()+ " "+ step.getEtp_numero());
 				
 			}
+			
+			request.setAttribute("stepCounter", Math.ceil((double) currentBrew.getBra_etapes().size()) - 1);
 			request.setAttribute("steps", currentBrew.getBra_etapes());
 			request.setAttribute("availableActioners", availableActioners);
 			request.setAttribute("tempServlet", ConfigLoader.getConfigByKey(Constants.CONFIG_PROPERTIES, "servlets.temperature.graph"));
