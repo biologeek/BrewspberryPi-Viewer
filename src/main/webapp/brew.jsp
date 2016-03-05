@@ -39,7 +39,7 @@
 				jQuery
 						.ajax(
 								{
-									url : "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=deactivate&id="
+									url : "${actionerServiceAddress}?type=deactivate&id="
 											+ actionerUUID
 											+ "&bid="
 											+ brew
@@ -53,7 +53,7 @@
 			jQuery
 					.ajax(
 							{
-								url : "http://192.168.0.20:8080/brewspberry-viewer/Actionner?type=activate&uuid="
+								url : "${actionerServiceAddress}?type=activate&uuid="
 										+ actionerUUID
 										+ "&bid="
 										+ brew

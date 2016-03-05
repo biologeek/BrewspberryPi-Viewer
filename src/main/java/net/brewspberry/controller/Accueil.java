@@ -100,7 +100,7 @@ public class Accueil extends HttpServlet {
 			request.setAttribute("availableActioners", availableActioners);
 			request.setAttribute("tempServlet", ConfigLoader.getConfigByKey(Constants.CONFIG_PROPERTIES, "servlets.temperature.graph"));
 
-			
+			request.setAttribute("actionerServiceAddress", ConfigLoader.getConfigByKey(Constants.CONFIG_PROPERTIES, "servlets.actioners.activation"));
 			
 			
 			request.getRequestDispatcher("brew.jsp").forward(request, response);	
