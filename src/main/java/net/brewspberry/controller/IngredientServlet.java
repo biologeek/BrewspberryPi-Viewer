@@ -190,9 +190,9 @@ public class IngredientServlet extends HttpServlet {
 					
 					}
 				}
-				logger.info("Recording malt");
+				logger.info("Recording hop");
 
-				proc.record((SimpleHoublon) ingredient, request);
+				proc.record((SimpleHoublon) houblon, request);
 
 				break;
 
@@ -216,7 +216,7 @@ public class IngredientServlet extends HttpServlet {
 					}
 				}
 
-				proc.record((SimpleLevure) ingredient, request);
+				proc.record((SimpleLevure) levure, request);
 
 				break;
 			}
