@@ -78,7 +78,7 @@ public class Accueil extends HttpServlet {
 			}
 			request.setAttribute("brassin", currentBrew);
 			
-			System.out.println(currentBrew.getBra_etapes());
+			logger.info("Steps for brew : "+currentBrew.getBra_etapes());
 			
 			List<Actioner> availableActioners = new ArrayList<Actioner>();
 			
