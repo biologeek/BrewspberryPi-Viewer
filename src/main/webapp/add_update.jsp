@@ -1,6 +1,6 @@
-<%@page import="net.brewspberry.business.beans.Levure"%>
-<%@page import="net.brewspberry.business.beans.Houblon"%>
-<%@page import="net.brewspberry.business.beans.Malt"%>
+<%@page import="net.brewspberry.business.beans.SimpleLevure"%>
+<%@page import="net.brewspberry.business.beans.SimpleHoublon"%>
+<%@page import="net.brewspberry.business.beans.SimpleMalt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -48,13 +48,15 @@
 
 
 <%
-	List<Malt> maltList = (List<Malt>) request.getAttribute("maltList");
-		List<Houblon> hopList = (List<Houblon>) request
+	List<SimpleMalt> maltList = (List<SimpleMalt>) request.getAttribute("maltList");
+		List<SimpleHoublon> hopList = (List<SimpleHoublon>) request
 		.getAttribute("hopList");
-		List<Levure> yeastList = (List<Levure>) request
+		List<SimpleLevure> yeastList = (List<SimpleLevure>) request
 		.getAttribute("yeastList");
 %>
+
 <script>
+
 	jQuery(document).ready(function() {
 		FormValidation.init();
 	});
@@ -96,7 +98,7 @@
 
 
 <script type="text/javascript">
-	malt_counter = 2;
+	Smal_counter = 2;
 	hop_counter = 2;
 	yeast_counter = 2;
 
@@ -106,26 +108,26 @@
 		if (blockType == 0) {
 
 			var original = $('#malts-menus1');
-			var newID = "malts-menus" + malt_counter;
+			var newID = "malts-menus" + Smal_counter;
 			console.log(original);
 			var clone = original.clone(true, true);
 			console.log(clone);
 			$('#malts-container').append(clone.prop('id', newID));
 			console.log(clone.attr('id'));
 			clone.children('.control-group').first().children('label').text(
-					'Malt ' + malt_counter);
+					'Malt ' + Smal_counter);
 			clone.children('.control-group').first().children('.controls')
 					.first().children('select').attr('id',
-							'select0' + malt_counter);
+							'select0' + Smal_counter);
 			console.log(clone.children('.control-group').first().children(
 					'label').text());
 			console.log(clone.children('.control-group').first().children(
 					'.controls').first().children('select').attr('id'));
 
-			malt_counter += 1;
+			Smal_counter += 1;
 			console.log('Adding to malts');
 
-			return malt_counter - 1
+			return Smal_counter - 1
 		} else if (blockType == 1) {
 
 			var original = $('#hops-menus1');
@@ -197,7 +199,7 @@
 			var ingredientsJSON = JSON.parse(ingredients);
 			console.log(ingredientsJSON.ingredients);
 
-			var malt_counter = 0;
+			var Smal_counter = 0;
 			var hop_counter = 0;
 			var yeast_counter = 0;
 
@@ -205,7 +207,7 @@
 
 				// If i == 0, fills the first menu 
 				if (ingredientsJSON.ingredients[i].typeIng == "malt") {
-					if (malt_counter == 0) {
+					if (Smal_counter == 0) {
 						console.log('Malt value : '
 								+ ingredientsJSON.ingredients[i].id)
 						$('#malts-menus1').find('select').val(
@@ -213,7 +215,7 @@
 
 						$('#malts-menus1').find('input[name=maltQte]').val(
 								ingredientsJSON.ingredients[i].qte);
-						malt_counter += 1;
+						Smal_counter += 1;
 					} else {
 						var newBlockID = addABlock(0);
 						console.log('newBlockID ' + newBlockID);
@@ -261,7 +263,7 @@
 				} else {
 					console.log("type"
 							+ ingredientsJSON.ingredients.element[i].typeIng
-							+ " corresponds to nothing")
+							+ " corresponds to nothing");
 
 				}
 			}
@@ -269,11 +271,6 @@
 	}
 </script>
 
-
-<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
 <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
 
@@ -378,7 +375,7 @@
 
 														<c:forEach items="${maltList}" var="malt">
 															<option value="${malt.getIng_id()}">Malt
-																${malt.getMalt_cereale()} ${malt.getMalt_type()} -
+																${malt.getSmal_cereale()} ${malt.getSmal_type()} -
 																${malt.getIng_desc()}</option>
 														</c:forEach>
 
@@ -423,7 +420,7 @@
 
 														<c:forEach items="${hopList}" var="hop">
 															<option value="${hop.getIng_id()}">Houblon
-																${hop.getHbl_variete()} (${hop.getHbl_acide_alpha()} %)</option>
+																${hop.getShbl_variete()} (${hop.getShbl_acide_alpha()} %)</option>
 														</c:forEach>
 
 													</select>
@@ -507,7 +504,7 @@
 									<br /> <br /> <input type="hidden" name="brassinID"
 										value="${brassinIDValue}" /> <input type="hidden"
 										name="registerStep" value="1" />
-
+									<input type="hidden" name = "typeOfAdding" value = "brew">
 									<div class="form-actions">
 										<button type="submit" class="btn btn-primary">Save
 											changes</button>

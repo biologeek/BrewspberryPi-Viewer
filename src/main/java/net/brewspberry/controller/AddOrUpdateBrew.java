@@ -22,6 +22,9 @@ import net.brewspberry.business.beans.Etape;
 import net.brewspberry.business.beans.Houblon;
 import net.brewspberry.business.beans.Levure;
 import net.brewspberry.business.beans.Malt;
+import net.brewspberry.business.beans.SimpleHoublon;
+import net.brewspberry.business.beans.SimpleLevure;
+import net.brewspberry.business.beans.SimpleMalt;
 import net.brewspberry.business.service.BrassinServiceImpl;
 import net.brewspberry.business.service.EtapeServiceImpl;
 import net.brewspberry.business.service.HopServiceImpl;
@@ -45,10 +48,10 @@ public class AddOrUpdateBrew extends HttpServlet {
 
 	private Long brewid = new Long(0);
 
-	private List<Malt> maltList = new ArrayList<Malt>();
+	private List<SimpleMalt> maltList = new ArrayList<SimpleMalt>();
 
-	private List<Houblon> hopList = new ArrayList<Houblon>();
-	private List<Levure> yeastList = new ArrayList<Levure>();
+	private List<SimpleHoublon> hopList = new ArrayList<SimpleHoublon>();
+	private List<SimpleLevure> yeastList = new ArrayList<SimpleLevure>();
 
 	private Brassin currentBrassin = new Brassin();
 
@@ -98,8 +101,11 @@ public class AddOrUpdateBrew extends HttpServlet {
 
 					request.setAttribute("dateDebutValue",
 							sdf.format(currentBrassin.getBra_debut()));
+					if (currentBrassin.getBra_fin() != null){
 					request.setAttribute("dateFinValue",
 							sdf.format(currentBrassin.getBra_fin()));
+					}
+
 					request.setAttribute("brassinNomValue",
 							currentBrassin.getBra_nom());
 					request.setAttribute("brassinQteValue",
@@ -127,9 +133,9 @@ public class AddOrUpdateBrew extends HttpServlet {
 		// On passe les paramètres pour peupler les listes
 		logger.info("Création d'un brassin");
 
-		maltList = (new MaltServiceImpl()).getAllDistinctElements();
-		hopList = (new HopServiceImpl()).getAllDistinctElements();
-		yeastList = (new YeastServiceImpl()).getAllDistinctElements();
+		maltList = (new MaltServiceImpl()).new SimpleMaltServiceImpl().getAllDistinctElements();
+		hopList = (new HopServiceImpl()).new SimpleHopServiceImpl().getAllDistinctElements();
+		yeastList = (new YeastServiceImpl()).new SimpleYeastServiceImpl().getAllDistinctElements();
 
 		System.out.print("bloublou");
 		System.out.print(maltList);
@@ -179,7 +185,9 @@ public class AddOrUpdateBrew extends HttpServlet {
 		}
 
 		if (request.getParameter("typeOfAdding") != null) {
-			String typeOfAdding = request.getParameter("typeOfAdding");
+			String typeOfAdding = (String) request.getParameter("typeOfAdding");
+			
+			logger.info(typeOfAdding);
 			switch (typeOfAdding) {
 
 			/*
@@ -189,22 +197,23 @@ public class AddOrUpdateBrew extends HttpServlet {
 
 				Processor<Brassin> brewProc = new BrewProcessor();
 
-				if (request.getAttribute("brassinID") != null) {
+				logger.info("passe par là");
+				if (request.getParameter("brassinID") != null && !request.getParameter("brassinID").equals("")) {
 
 					/*
 					 * Updating
 					 */
 					logger.info("Updating brew with ID : "
-							+ request.getAttribute("brassinID"));
+							+ request.getParameter("brassinID"));
 					try {
 						Brassin currentBrew = brassinService
 								.getElementById(Long.parseLong((String) request
-										.getAttribute("brassinID")));
+										.getParameter("brassinID")));
 
 						brewProc.record(currentBrew, request);
 
 					} catch (Exception e) {
-
+						e.printStackTrace();
 					}
 
 				} else {
@@ -213,7 +222,7 @@ public class AddOrUpdateBrew extends HttpServlet {
 					 * Creating new brew
 					 */
 
-					brewProc.record(null, request);
+					brewProc.record(new Brassin(), request);
 
 				}
 
@@ -268,7 +277,8 @@ public class AddOrUpdateBrew extends HttpServlet {
 
 		// TODO : rediriger vers la 2 ème page. En attendant, on affiche le
 		// brassin
-		response.sendRedirect("Accueil?bid="+currentBrassin.getBra_id());
+		//response.sendRedirect("Accueil?bid="+currentBrassin.getBra_id());
+		request.getRequestDispatcher("accueil_viewer.jsp").forward(request, response);
 
 	}
 
@@ -279,7 +289,7 @@ public class AddOrUpdateBrew extends HttpServlet {
 		String JSONhops = "";
 		String JSONyeasts = "";
 		JSONmalts = JSONmalts + "\"ingredients\" : [";
-		if (malts != null) {
+		if (malts != null && malts.size() > 0) {
 			for (Malt malt : malts) {
 				JSONmalts = JSONmalts + "{\"typeIng\" :\"malt\",";
 
@@ -291,7 +301,7 @@ public class AddOrUpdateBrew extends HttpServlet {
 						+ "\"},";
 			}
 		}
-		if (hops != null) {
+		if (hops != null && hops.size() > 0) {
 
 			for (Houblon hop : hops) {
 				JSONhops = JSONhops + "{\"typeIng\" :\"hop\",";
@@ -303,7 +313,7 @@ public class AddOrUpdateBrew extends HttpServlet {
 						+ "\"},";
 			}
 		}
-		if (yeasts != null) {
+		if (yeasts != null && yeasts.size() > 0) {
 			for (Levure yeast : yeasts) {
 				JSONyeasts = JSONyeasts + "{\"typeIng\" :\"yeast\",";
 
@@ -314,10 +324,11 @@ public class AddOrUpdateBrew extends HttpServlet {
 
 			}
 			JSONyeasts = JSONyeasts.substring(0, JSONyeasts.length() - 1);
-			JSONyeasts = JSONyeasts + "]";
 		}
+		JSONyeasts = JSONyeasts + "]";
 
 		String result = "{" + JSONmalts + JSONhops + JSONyeasts + "}";
+		result = result.replace(",]", "]");
 		return result;
 	}
 

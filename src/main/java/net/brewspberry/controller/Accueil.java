@@ -85,13 +85,13 @@ public class Accueil extends HttpServlet {
 			availableActioners = DeviceParser.getInstance().getDevices(Constants.DEVICES_PROPERTIES);
 			for (Actioner act : availableActioners){
 				
-				logger.info("Device : "+act.getAct_nom()+", pin="+act.getAct_raspi_pin()+", uuid="+act.getAct_uuid());
+				logger.fine("Device : "+act.getAct_nom()+", pin="+act.getAct_raspi_pin()+", uuid="+act.getAct_uuid());
 				
 			}
 			
 			for (Etape step : currentBrew.getBra_etapes()){
 				
-				logger.info("||" + step.getEtp_nom()+ " "+ step.getEtp_id()+ " "+ step.getEtp_numero());
+				logger.fine("||" + step.getEtp_nom()+ " "+ step.getEtp_id()+ " "+ step.getEtp_numero());
 				
 			}
 			
