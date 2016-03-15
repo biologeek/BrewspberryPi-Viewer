@@ -50,18 +50,15 @@
 						});
 
 			}
-			jQuery
-					.ajax(
-							{
-								url : "${actionerServiceAddress}?type=activate&uuid="
-										+ actionerUUID
-										+ "&bid="
-										+ brew
-										+ "&eid=" + step,
-								context : document.body
-							}).done(function() {
-						$(this).addClass("done");
-					});
+			jQuery.ajax(
+					{
+						url : "${actionerServiceAddress}?type=activate&uuid="
+								+ actionerUUID + "&bid=" + brew + "&eid="
+								+ step,
+						context : document.body
+					}).done(function() {
+				$(this).addClass("done");
+			});
 
 		}
 
@@ -91,73 +88,23 @@
 				</div>
 
 				<!-- Loop over each step -->
-
-				<c:forEach begin="0" end="${stepCounter}" var="loop">
-					<c:if test="${steps[loop*2].getEtp_id() != null}">
-						<div class="row-fluid">
-							<div class="span6">
-								<!-- block -->
-								<div class="block">
-									<div class="navbar navbar-inner block-header">
-										<div class="muted pull-left">Etape</div>
-										<div class="pull-right">
-											<span class="badge badge-info">${steps[loop*2].getEtp_numero()}</span>
-
-										</div>
-									</div>
-									<div class="block-content collapse in">
-										<table class="table table-striped"
-											style="table-layout: fixed;">
-											<thead>
-												<tr>
-													<th>#</th>
-													<th>Label</th>
-													<th>Durée</th>
-													<th>Température</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>${steps[loop*2].getEtp_numero()}</td>
-													<td>${steps[loop*2].getEtp_nom()}</td>
-													<td>${steps[loop*2].getEtp_duree()}</td>
-													<td>${steps[loop*2].getEtp_temperature_theorique()}</td>
-												</tr>
-												<tr>
-													<td colspan="4"><a
-														href="${tempServlet}?type=etp&eid=${steps[loop*2].getEtp_id()}&width=300&height=300">
-															<img alt="JFreeGraph"
-															src="${tempServlet}?type=etp&eid=${steps[loop*2].getEtp_id()}&width=300&height=300"
-															style="height: 250px; width: 300px; margin: 0 auto; display: block;" />
-													</a></td>
-												</tr>
-
-												<tr>
-													<td colspan="4"><c:forEach
-															items="${availableActioners}" var="actioner">
-															<a href="#"
-																onclick="changeActionerState('${steps[loop*2].getEtp_brassin().getBra_id()}','${steps[loop*2].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a>
-														</c:forEach></td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-								<!-- /block -->
-							</div>
-							<c:if test="${loop*2+1 < steps.size()}">
+				<c:if test="${steps.size() > 0}">
+					<c:forEach begin="0" end="${steps.size()}" var="loop">
+						<c:if test="${steps[loop].getEtp_id() != null}">
+							<div class="row-fluid">
 								<div class="span6">
 									<!-- block -->
 									<div class="block">
 										<div class="navbar navbar-inner block-header">
 											<div class="muted pull-left">Etape</div>
 											<div class="pull-right">
-												<span class="badge badge-info">${steps[loop*2+1].getEtp_numero()}</span>
+												<span class="badge badge-info">${steps[loop].getEtp_numero()}</span>
 
 											</div>
 										</div>
 										<div class="block-content collapse in">
-											<table class="table table-striped">
+											<table class="table table-striped"
+												style="table-layout: fixed;">
 												<thead>
 													<tr>
 														<th>#</th>
@@ -168,39 +115,51 @@
 												</thead>
 												<tbody>
 													<tr>
-														<td>${steps[loop*2+1].getEtp_numero()}</td>
-														<td>${steps[loop*2+1].getEtp_nom()}</td>
-														<td>${steps[loop*2+1].getEtp_duree()}</td>
-														<td>${steps[loop*2+1].getEtp_temperature_theorique()}</td>
+														<td>${steps[loop].getEtp_numero()}</td>
+														<td>${steps[loop].getEtp_nom()}</td>
+														<td>${steps[loop].getEtp_duree()}</td>
+														<td>${steps[loop].getEtp_temperature_theorique()}</td>
 													</tr>
-													<tr>
 
-														<td colspan="4"><a
-															href="${tempServlet}?type=etp&eid=${steps[loop*2+1].getEtp_id()}&width=300&height=300">
-																<img alt="JFreeGraph"
-																src="${tempServlet}?type=etp&eid=${steps[loop*2+1].getEtp_id()}&width=300&height=300"
-																style="height: 250px; width: 300px; margin: 0 auto; display: block;" />
-														</a></td>
-													</tr>
 													<tr>
 														<td colspan="4"><c:forEach
 																items="${availableActioners}" var="actioner">
 																<a href="#"
-																	onclick="changeActionerState('${steps[loop*2+1].getEtp_brassin().getBra_id()}','${steps[loop*2+1].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a>
+																	onclick="changeActionerState('${steps[loop].getEtp_brassin().getBra_id()}','${steps[loop].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a>
 															</c:forEach></td>
 													</tr>
 												</tbody>
 											</table>
 										</div>
-
 									</div>
 									<!-- /block -->
 								</div>
-							</c:if>
-						</div>
-						<c:set var="loop" value="${loop+1}"></c:set>
-					</c:if>
-				</c:forEach>
+								<div class="span6">
+									<!-- block -->
+									<div class="block">
+										<div class="navbar navbar-inner block-header">
+											<div class="muted pull-left">Etape</div>
+											<div class="pull-right">
+												<span class="badge badge-info">${steps[loop].getEtp_numero()}</span>
+
+											</div>
+										</div>
+										<div class="block-content collapse in">
+											<a
+												href="${tempServlet}?type=etp&eid=${steps[loop].getEtp_id()}&width=300&height=300">
+												<img alt="JFreeGraph"
+												src="${tempServlet}?type=etp&eid=${steps[loop].getEtp_id()}&width=300&height=300"
+												style="height: 250px; width: 300px; margin: 0 auto; display: block;" />
+											</a>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</c:if>
+
+					</c:forEach>
+				</c:if>
 				<div class="row-fluid">
 
 					<!-- block -->

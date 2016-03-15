@@ -225,7 +225,6 @@ public class AddOrUpdateBrew extends HttpServlet {
 					brewProc.record(new Brassin(), request);
 
 				}
-
 				break;
 
 			case "step":
@@ -269,16 +268,17 @@ public class AddOrUpdateBrew extends HttpServlet {
 					stepProc.record(currentBrassin, request);
 
 				}
-
 				break;
+
 			}
 
 		}
 
-		// TODO : rediriger vers la 2 ème page. En attendant, on affiche le
-		// brassin
-		//response.sendRedirect("Accueil?bid="+currentBrassin.getBra_id());
-		request.getRequestDispatcher("accueil_viewer.jsp").forward(request, response);
+		
+		if (currentBrassin.getBra_id() > 0)
+			response.sendRedirect("Accueil?bid="+currentBrassin.getBra_id());
+		else
+			response.sendRedirect("Accueil");
 
 	}
 
