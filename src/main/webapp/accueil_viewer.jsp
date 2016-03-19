@@ -40,8 +40,6 @@
 			<jsp:include page="tpl/sidebar.jsp"></jsp:include>
 			<!--/span-->
 			<div class="span9" id="content">
-
-
 				<div class="row-fluid">
 					<!-- block -->
 					<div class="block">
@@ -55,7 +53,8 @@
 										<tr>
 											<th>#</th>
 											<th>Nom</th>
-											<th>Date</th>
+											<th>Début</th>
+											<th>Fin</th>
 											<th>Type</th>
 											<th>Progression</th>
 										</tr>
@@ -67,6 +66,7 @@
 							                  	<td>${brew.getBra_id()}</td>
 							                  	<td><a href="Accueil?bid=${brew.getBra_id()}">${brew.getBra_nom()}</a></td>
 							                  	<td><fmt:formatDate value="${brew.getBra_debut()}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
+							                  	<td><fmt:formatDate value="${brew.getBra_fin()}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
 							                  	<td>${brew.getBra_type()}</td>
 							                  	<td>
 									                <div class="progress progress-striped active">

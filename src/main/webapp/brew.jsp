@@ -144,7 +144,7 @@
 
 											</div>
 										</div>
-										<div class="block-content collapse in">
+										<div class="block-content collapse in" id="CHART${loop}"'>
 											<a
 												href="${tempServlet}?type=etp&eid=${steps[loop].getEtp_id()}&width=300&height=300">
 												<img alt="JFreeGraph"
