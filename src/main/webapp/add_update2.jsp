@@ -122,14 +122,41 @@
 					</div>
 					<div class="block-content collapse in">
 						<div class="span12">
-							<form action="AddOrUpdateBrew" class="form-horizontal"
-								method="post">
-								<fieldset>
-									<legend>Brassin</legend>
-									
-									
-									
-								</fieldset>
+							<form
+								action="AddOrUpdateBrew?typeOfAdding=step&bid=${brassin.getBra_id()}"
+								class="form-horizontal" method="post">
+								<table class="table table-striped">
+									<tbody>
+										<tr>
+											<td>Label</td>
+											<td><input type="text" name="step_label" /></td>
+
+											<td>Durée théorique</td>
+											<td><input type="text" name="step_duration" /></td>
+										</tr>
+										<tr>
+											<td>Température théorique</td>
+											<td><input type="text" name="step_temperature" /></td>
+
+											<td>Commentaire</td>
+											<td><textarea name="step_comment" rows="3" cols="15"></textarea></td>
+										</tr>
+										<tr>
+											<td>Etape n°</td>
+											<td><input type="text" name="step_number"
+												value="${steps.size()}" /></td>
+											<td></td>
+											<td></td>
+											<td>
+										</tr>
+										<tr>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td><button type="submit" class="btn btn-primary">+</button></td>
+										</tr>
+									</tbody>
+								</table>
 							</form>
 
 						</div>

@@ -82,8 +82,7 @@ public class AddOrUpdateBrew extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		logger.info("doGet");
-
+			
 		if (request.getParameter("bid") != null
 				&& request.getParameter("bid") != "") {
 
@@ -129,6 +128,7 @@ public class AddOrUpdateBrew extends HttpServlet {
 				throw new NumberFormatException();
 
 		}
+		
 		// Création de brassin
 		// On passe les paramètres pour peupler les listes
 		logger.info("Création d'un brassin");
@@ -187,7 +187,6 @@ public class AddOrUpdateBrew extends HttpServlet {
 		if (request.getParameter("typeOfAdding") != null) {
 			String typeOfAdding = (String) request.getParameter("typeOfAdding");
 			
-			logger.info(typeOfAdding);
 			switch (typeOfAdding) {
 
 			/*
@@ -197,7 +196,6 @@ public class AddOrUpdateBrew extends HttpServlet {
 
 				Processor<Brassin> brewProc = new BrewProcessor();
 
-				logger.info("passe par là");
 				if (request.getParameter("brassinID") != null && !request.getParameter("brassinID").equals("")) {
 
 					/*

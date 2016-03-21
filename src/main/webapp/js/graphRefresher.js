@@ -7,11 +7,11 @@ $(document).ready(function(){
 	
 	
 	/* Defines colors taken by lines */
-	var colors = {"rgba(220,220,220,0.7)",
-			"rgba(200,200,200,0.7)",
-			"rgba(240,240,240,0.7)",
-			"rgba(260,260,260,0.7)",
-			"rgba(280,280,280,0.7)"};
+	var colors = ["220,220,220",
+			"200,200,200",
+			"240,240,240",
+			"260,260,260",
+			"280,280,280"];
 	
 	var initServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/initTemperatures';
 	var updateServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/updateTemperatures';
@@ -40,7 +40,7 @@ $(document).ready(function(){
 			address = updateServletAddress;
 		}
 		
-		if (typeof probe == "string"){
+		if (typeof probe == "string" && probe != 'all'){
 				
 				address +='/u/'+uuid+'';
 			
@@ -73,12 +73,12 @@ $(document).ready(function(){
 	
 	}
 	
-	function buildGraph(loop, labels, dataSets) {
+	function buildGraph(loop, labels, dataSets, divID) {
 	
 		
-		var ctx = document.getElementById("myChart"+loop).getContext("2d");
+		var ctx = document.getElementById(divID).getContext("2d");
 	
-		
+		getDataFromServlet(probe, init, lastID);
 		data = buildDataSetsForChartJS(labels, dataSets);
 		
 		var myLineChart = new Chart(ctx).Line(data, options);
@@ -109,12 +109,14 @@ $(document).ready(function(){
 		}
 		
 		
-		//For each item	
+		// For each item
 		jQuery.each (data, function (i, item){
-			//item : {"date":"2016-03-16 18:15:55.0","temp":16187,"name":"PROBE0","step":8,"id":1277,"brew":7,"uuid":"28-000006ddab6e"}
+			// item : {"date":"2016-03-16
+			// 18:15:55.0","temp":16187,"name":"PROBE0","step":8,"id":1277,"brew":7,"uuid":"28-000006ddab6e"}
 			
 			
-			//yValues = {"PROBE1":[temperatures, ...], "PROBE2":[temperatures, ...], "PROBE3":[temperatures, ...]...}
+			// yValues = {"PROBE1":[temperatures, ...], "PROBE2":[temperatures,
+			// ...], "PROBE3":[temperatures, ...]...}
 			
 			console.log ('PROBES : '+item.name);
 			
@@ -130,7 +132,7 @@ $(document).ready(function(){
 			
 		});
 
-		//Building final data for ChartJS
+		// Building final data for ChartJS
 
 		data.labels = xlabels;
 		data.datasets = [];
@@ -140,30 +142,46 @@ $(document).ready(function(){
 			
 			console.log (item);
 			data.datasets.push (
-			{
-
-	            label: item.key,
-	            fillColor: "rgba(220,220,220,0.2)",
-	            strokeColor: "rgba(220,220,220,1)",
-	            pointColor: "rgba(220,220,220,1)",
-	            pointStrokeColor: "#fff",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "rgba(220,220,220,1)",
-	            data: item
-				
-			}		
-			
-			);
-			
+				{
+	
+		            label: item.key,
+		            fillColor: "rgba("+colors[i]+",0.2)",
+		            strokeColor: "rgba("+colors[i]+",1)",
+		            pointColor: "rgba("+colors[i]+",1)",
+		            pointStrokeColor: "#fff",
+		            pointHighlightFill: "#fff",
+		            pointHighlightStroke: "rgba("+colors[i]+",1)",
+		            data: item
+					
+				}					
+			);			
 		});
 		
-		
-		
-		
+		return data;
 		
 	}
+	
+	
+	/**
+	 * Calculates color of line for the dataset with ID id
+	 * 
+	 * Chooses 2 random numbers, third is 0
+	 * 
+	 * Returns RGB color code "xxx,yyy,zzz"
+	 * 
+	 */
+	function detemineColorForSet(id, totalIDs){
 
 
+		colorTable = [Math.floor((Math.random() * 255) + 1), Math.floor((Math.random() * 255) + 1), Math.floor((Math.random() * 255) + 1)];
+
+		zeroIS = Math.floor((Math.random() * 2) + 1)
+		
+		colorTable [zeroIS] = 0;
+		
+		return colorTable.toString();
+		
+	} 
 
 
 });
