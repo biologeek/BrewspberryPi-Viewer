@@ -2,20 +2,41 @@
  * Using chartjs
  * 
  ******************************************************************************/
+
+
 $(document).ready(function(){
-	var rawDataFromServlet = {};
+	
+var rawDataFromServlet = {};
+
+var liveChart;
+var chartOptions ={animationSteps: 10};
+
+var initServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/initTemperatures';
+var updateServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/updateTemperatures';
+	
+var refreshDelay = 2000; // Refreshes every 2 s
+	
+
+var currentLastID = 0;
+	
+
+
+function execute (htmlID, step, probe){
 	
 	
-	/* Defines colors taken by lines */
-	var colors = ["220,220,220",
-			"200,200,200",
-			"240,240,240",
-			"260,260,260",
-			"280,280,280"];
+	// Initiating chart
+	buildGraph(buildDataSetsForChartJS (getDataFromServlet(step, probe, true, 0)));
 	
-	var initServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/initTemperatures';
-	var updateServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/updateTemperatures';
 	
+	// Updating
+	setInterval (function (){
+		
+		updateChartWithNewData (getDataFromServlet (step, probe, false, lastID))
+		
+	}, refreshDelay);
+	
+	
+}
 	
 	/**
 	 * probe is a list of probes Receiving data formatted as such :
@@ -26,7 +47,7 @@ $(document).ready(function(){
 	 * 
 	 * Uses ajax GET Request to retrieve data
 	 */
-	function getDataFromServlet(probe, init, lastID) {
+	function getDataFromServlet(step, probe, init, lastID) {
 		/* if probe is not null retrieves data for this probe */
 	
 		
@@ -38,6 +59,16 @@ $(document).ready(function(){
 			address = initServletAddress;
 		} else {
 			address = updateServletAddress;
+		}
+
+		if (typeof step == "string" && step != 'all'){
+				
+				address +='/e/'+step+'';
+			
+			
+		} else {
+			
+			alert ('UUID is not a string')
 		}
 		
 		if (typeof probe == "string" && probe != 'all'){
@@ -81,13 +112,13 @@ $(document).ready(function(){
 		getDataFromServlet(probe, init, lastID);
 		data = buildDataSetsForChartJS(labels, dataSets);
 		
-		var myLineChart = new Chart(ctx).Line(data, options);
+		liveChart = new Chart(ctx).Line(data, chartOptions);
 	
 		
 	}
 	
 	/**
-	 * Receiving data as a list of {probe;date;temperature} convetrting them to
+	 * Receiving data as a list of {probe;date;temperature} converting them to
 	 * ChartJS datasets. Example :
 	 * 
 	 * [{"date":"2016-03-16
@@ -134,14 +165,14 @@ $(document).ready(function(){
 
 		// Building final data for ChartJS
 
-		data.labels = xlabels;
-		data.datasets = [];
+		chartData.labels = xlabels;
+		chartData.datasets = [];
 		
 		
 		jQuery.each (yValues, function(i, item){
 			
 			console.log (item);
-			data.datasets.push (
+			chartData.datasets.push (
 				{
 	
 		            label: item.key,
@@ -154,11 +185,31 @@ $(document).ready(function(){
 		            data: item
 					
 				}					
-			);			
+			);
+			
+			currentLastID = item.id; 
 		});
 		
-		return data;
+		return chartData;
 		
+	}
+	
+	/**
+	 * Updates chart using data from service
+	 */
+	function updateChartWithNewData (data){
+		
+		if (typeof data == "string"){
+			
+			data = jQuery.parseJSON(data);
+		}
+		
+		
+		jQuery.each (data, function (i, item){
+						
+			liveChart.addData([item.temp], item.date);
+			currentLastID = item.id;
+		}
 	}
 	
 	
@@ -184,4 +235,5 @@ $(document).ready(function(){
 	} 
 
 
+	
 });
