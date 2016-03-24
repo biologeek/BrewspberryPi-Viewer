@@ -15,17 +15,19 @@ var initServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/initTemp
 var updateServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/updateTemperatures';
 	
 var refreshDelay = 2000; // Refreshes every 2 s
-	
+
 
 var currentLastID = 0;
-	
+	var testData = [{"date": "2016-03-16 18:15:55.0","temp": 16155,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:56.0","temp": 15980,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:57.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:58.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:59.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:00.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:01.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:02.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:03.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:04.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"}];
 
+
+buildGraph(buildDataSetsForChartJS(testData), 'graph');
 
 function execute (htmlID, step, probe){
 	
 	
 	// Initiating chart
-	buildGraph(buildDataSetsForChartJS (getDataFromServlet(step, probe, true, 0)));
+	buildGraph(buildDataSetsForChartJS (getDataFromServlet(step, probe, true, 0)), htmlID);
 	
 	
 	// Updating
@@ -104,15 +106,11 @@ function execute (htmlID, step, probe){
 	
 	}
 	
-	function buildGraph(loop, labels, dataSets, divID) {
+	function buildGraph(dataSets, divID) {
 	
 		
 		var ctx = document.getElementById(divID).getContext("2d");
-	
-		getDataFromServlet(probe, init, lastID);
-		data = buildDataSetsForChartJS(labels, dataSets);
-		
-		liveChart = new Chart(ctx).Line(data, chartOptions);
+		liveChart = new Chart(ctx).Line(dataSets, chartOptions);
 	
 		
 	}
@@ -132,6 +130,7 @@ function execute (htmlID, step, probe){
 		var xLabels = [];
 		var yValues = {}
 		var datasets = {};
+		var chartData = {};
 		
 		
 		if (typeof data == "string"){
@@ -151,23 +150,30 @@ function execute (htmlID, step, probe){
 			
 			console.log ('PROBES : '+item.name);
 			
-			xLabels.push(item.date);
+			
+			// Everytime a new date is added in xLabels
+			xLabels.push(formatDateFromJavaToJS(item.date));
 			
 			var itemName = item.name;
-			if (yValues.hasOwnProperty(itemName))){
-				
-				yValues.itemName.push(item.temp);
-				
+
+			if (!yValues.hasOwnProperty(itemName)){
+							
+				yValues[itemName] = [];
+
 			}
+				yValues[itemName].push(item.temp);
 			
 			
 		});
 
+		console.log (xLabels)
 		// Building final data for ChartJS
 
-		chartData.labels = xlabels;
+		chartData.labels = xLabels;
 		chartData.datasets = [];
 		
+		console.log (yValues);
+
 		
 		jQuery.each (yValues, function(i, item){
 			
@@ -176,17 +182,17 @@ function execute (htmlID, step, probe){
 				{
 	
 		            label: item.key,
-		            fillColor: "rgba("+colors[i]+",0.2)",
-		            strokeColor: "rgba("+colors[i]+",1)",
-		            pointColor: "rgba("+colors[i]+",1)",
+		            fillColor: "rgba("+detemineColorForSet(i, yValues.length)+",0.2)",
+		            strokeColor: "rgba("+detemineColorForSet(i, yValues.length)+",1)",
+		            pointColor: "rgba("+detemineColorForSet(i, yValues.length)+",1)",
 		            pointStrokeColor: "#fff",
 		            pointHighlightFill: "#fff",
-		            pointHighlightStroke: "rgba("+colors[i]+",1)",
+		            pointHighlightStroke: "rgba("+detemineColorForSet(i, yValues.length)+",1)",
 		            data: item
 					
 				}					
 			);
-			
+			console.log(chartData);
 			currentLastID = item.id; 
 		});
 		
@@ -209,7 +215,8 @@ function execute (htmlID, step, probe){
 						
 			liveChart.addData([item.temp], item.date);
 			currentLastID = item.id;
-		}
+			
+		});
 	}
 	
 	
@@ -233,6 +240,17 @@ function execute (htmlID, step, probe){
 		return colorTable.toString();
 		
 	} 
+	
+	function formatDateFromJavaToJS (javaDate){
+		
+		var date = new Date (javaDate);
+		
+		
+		var newDate = moment(date).format('LTS');
+		
+		console.log (newDate);
+		return newDate;
+	}
 
 
 	
