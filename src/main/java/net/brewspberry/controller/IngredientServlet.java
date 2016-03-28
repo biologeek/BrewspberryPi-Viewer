@@ -61,6 +61,11 @@ public class IngredientServlet extends HttpServlet {
 		
 		String ingredientType = "";
 		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+		response.setDateHeader("Expires", 0); // Proxies.
+		
+		
 		if (request.getParameter("iid") != null && request.getParameter("type") != null){
 			/*
 			 * if request is not null, it's an update ! 

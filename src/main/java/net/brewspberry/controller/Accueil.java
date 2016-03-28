@@ -48,6 +48,11 @@ public class Accueil extends HttpServlet {
 		String bids = request.getParameter("bid");
 		Integer bid = null;
 		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+		response.setDateHeader("Expires", 0); // Proxies.
+		
+		
 		if (bids != null) {
 
 			try{
@@ -62,7 +67,7 @@ public class Accueil extends HttpServlet {
 		// Displays welcome page
 		if (bid == null || bid == 0) {
 			List<Brassin> brewList = brassinService.getAllElements();
-			
+			logger.fine("Got : "+brewList);
 			request.setAttribute("brewList", brewList);
 			request.getRequestDispatcher("accueil_viewer.jsp").forward(request, response);
 		}

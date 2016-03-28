@@ -21,13 +21,19 @@
 <link href="vendors/jGrowl/jquery.jgrowl.css" rel="stylesheet"
 	media="screen">
 
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script   src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+
+<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js">
+</script>
+<script type="text/javascript" src="js/graphRefresher.js"></script>
+
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+<script src="vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
 <script type="text/javascript">
 	function changeActionerState(brew, step, actionerUUID, actionerID) {
@@ -145,12 +151,14 @@
 											</div>
 										</div>
 										<div class="block-content collapse in" id="CHART${loop}"'>
-											<a
-												href="${tempServlet}?type=etp&eid=${steps[loop].getEtp_id()}&width=300&height=300">
-												<img alt="JFreeGraph"
-												src="${tempServlet}?type=etp&eid=${steps[loop].getEtp_id()}&width=300&height=300"
-												style="height: 250px; width: 300px; margin: 0 auto; display: block;" />
-											</a>
+											<canvas id="CANVAS${loop}">
+											<script>
+											console.log ('Executing...')
+
+												execute('CANVAS${loop}', '${steps[loop].getEtp_id()}', 'all');
+											
+											</script>
+											</canvas>
 
 										</div>
 									</div>

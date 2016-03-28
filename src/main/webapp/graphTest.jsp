@@ -5,14 +5,16 @@
 <title>Insert title here</title>
 <script   src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/graphRefresher.js"></script>
+<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.js"></script>
+
 </head>
 <body>
 
 
-<div id="graph">
+<canvas id="graph" onload="javascript:execute('graph')">
 
 
-</div>
+</canvas>
 
 </body>
 </html>

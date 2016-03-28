@@ -168,7 +168,7 @@
 				<div class="control-group"> \
 				<label class="control-label" for="date01">Use :</label> \
 				<div class="controls"> \
-					<select name="smal_type" id="select01" class="hop-select"> \
+					<select name="shbl_type" id="select01" class="hop-select"> \
 						<option value="default" selected="selected"></option> \
 						${hopTypeSpecificMenuOptions} \
 					</select> \
