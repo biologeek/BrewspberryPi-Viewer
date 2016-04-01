@@ -3,8 +3,6 @@
  * 
  ******************************************************************************/
 
-
-	
 var rawDataFromServlet = [];
 
 var liveChart;
@@ -21,8 +19,23 @@ var chartData = {};
 
 var currentLastID = 0;
 	//var testData = [{"date": "2016-03-16 18:15:55.0","temp": 16155,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:56.0","temp": 15980,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:57.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:58.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:59.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:00.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:01.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:02.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:03.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:04.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"}];
+	var rawDataFromServlet = [{"date": "2016-03-16 18:15:55.0","temp": 16155,"name": "PROBE1","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:55.0","temp": 19155,"name": "PROBE1","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:55.0","temp": 16155,"name": "PROBE1","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:55.0","temp": 16155,"name": "PROBE1","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:55.0","temp": 15155,"name": "PROBE1","step": 8,"id": 1279,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:56.0","temp": 15980,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:57.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:58.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:59.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:00.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:01.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:02.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:03.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:04.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"}];
 
 
+window.onload = function(){
+buildDataSetsForChartJS(function(){
+
+				buildGraph(chartData, 'graph');		
+
+			});
+
+	setInterval (function (){
+			
+			updateChartWithNewData ([{"id" : currentLastID+1, "name": "PROBE0","uuid": "28-000006ddab6e", "temp":Math.random()*20000, "date" : new Date()}]);
+			updateChartWithNewData ([{"id" : currentLastID+1, "name": "PROBE1", "uuid": "28-123456789", "temp":Math.random()*20000, "date" : new Date()}]);
+			
+		}, refreshDelay);
+}
 //buildGraph(buildDataSetsForChartJS(testData), 'graph');
 
 function execute (htmlID, step, probe){
@@ -158,8 +171,8 @@ function execute (htmlID, step, probe){
 	}
 	
 	function buildGraph(dataSets, divID) {
+		console.log (document.getElementById('graph'));
 	
-		console.log (divID);
 		var ctx = document.getElementById(divID).getContext("2d");
 		liveChart = new Chart(ctx).Line(dataSets, chartOptions);
 	
@@ -319,18 +332,13 @@ function execute (htmlID, step, probe){
 					//console.log(moment(item.date)+' : '+moment().subtract(minutes, 'minutes'));
 				if (moment(item.date).isSameOrAfter(moment().subtract(minutes, 'minutes'))){
 					
+					liveChart.removeData();
 
-					newChartData.push(item);
 					
 				}
 			}
 			
 		});
 		
-		console.log ('Kept '+newChartData.length+' records');
-		
-		rawDataFromServlet = newChartData;
 
 	}
-
-	
