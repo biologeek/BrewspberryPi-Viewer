@@ -131,7 +131,19 @@
 														<td colspan="4"><c:forEach
 																items="${availableActioners}" var="actioner">
 																<a href="#"
-																	onclick="changeActionerState('${steps[loop].getEtp_brassin().getBra_id()}','${steps[loop].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">${actioner.getAct_nom()}</a>
+																	onclick="changeActionerState('${steps[loop].getEtp_brassin().getBra_id()}','${steps[loop].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">
+																	<c:if test="${actioner.getAct_type() == 1}">
+																		<img style="height:50px; width:50px;" src="images/thermo-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
+																	</c:if>
+																	
+																	<c:if test="${actioner.getAct_type() == 2}">
+																		<img style="height:50px; width:50px;" src="images/pump-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
+																	</c:if>
+																	
+																	<c:if test="${actioner.getAct_type() == 3}">
+																		<img style="height:50px; width:50px;" src="images/engine-off.png" alt="${steps[loop].getEtp_nom()}" ></a>
+																	</c:if>
+																	
 															</c:forEach></td>
 													</tr>
 												</tbody>
@@ -151,11 +163,11 @@
 											</div>
 										</div>
 										<div class="block-content collapse in" id="CHART${loop}"'>
-											<canvas id="CANVAS${loop}">
+											<canvas id="CANVAS${loop}" width="450px" height = "300px"'>
 											<script>
 											console.log ('Executing...')
 
-												execute('CANVAS${loop}', '${steps[loop].getEtp_id()}', 'all');
+												execute('CANVAS${loop}', '${steps[loop].getEtp_id()}', 'all', 40);
 											
 											</script>
 											</canvas>

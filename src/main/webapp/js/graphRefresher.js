@@ -26,8 +26,9 @@ var currentLastID = 0;
 
 //buildGraph(buildDataSetsForChartJS(testData), 'graph');
 
-function execute (htmlID, step, probe){
+function execute (htmlID, step, probe, maxPoints){
 	
+	maxPointsNumber = maxPoints;
 	
 	// Initiating chart
 	getDataFromServlet(step, probe, true, 0, function(){
