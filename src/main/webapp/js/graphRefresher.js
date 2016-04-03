@@ -3,6 +3,8 @@
  * 
  ******************************************************************************/
 
+
+	
 var rawDataFromServlet = [];
 
 var liveChart;
@@ -11,31 +13,17 @@ var chartOptions ={animationSteps: 10};
 var initServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/initTemperatures';
 var updateServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/updateTemperatures';
 	
-var refreshDelay = 2000; // Refreshes every 2 s
+var refreshDelay = 5000; // Refreshes every 5 s
 
+var maxPointsNumber = 60;
 var XplotTimeRangeInMinutes = 5;
 var chartData = {};
 
 
 var currentLastID = 0;
 	//var testData = [{"date": "2016-03-16 18:15:55.0","temp": 16155,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:56.0","temp": 15980,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:57.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:58.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:59.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:00.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:01.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:02.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:03.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:04.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"}];
-	var rawDataFromServlet = [{"date": "2016-03-16 18:15:55.0","temp": 16155,"name": "PROBE1","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:55.0","temp": 19155,"name": "PROBE1","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:55.0","temp": 16155,"name": "PROBE1","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:55.0","temp": 16155,"name": "PROBE1","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:55.0","temp": 15155,"name": "PROBE1","step": 8,"id": 1279,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:56.0","temp": 15980,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:57.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:58.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:59.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:00.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:01.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:02.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:03.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"},{"date": "2016-03-16 18:15:04.0","temp": 16187,"name": "PROBE0","step": 8,"id": 1277,"brew": 7,"uuid": "28-000006ddab6e"}];
 
 
-window.onload = function(){
-buildDataSetsForChartJS(function(){
-
-				buildGraph(chartData, 'graph');		
-
-			});
-
-	setInterval (function (){
-			
-			updateChartWithNewData ([{"id" : currentLastID+1, "name": "PROBE0","uuid": "28-000006ddab6e", "temp":Math.random()*20000, "date" : new Date()}]);
-			updateChartWithNewData ([{"id" : currentLastID+1, "name": "PROBE1", "uuid": "28-123456789", "temp":Math.random()*20000, "date" : new Date()}]);
-			
-		}, refreshDelay);
-}
 //buildGraph(buildDataSetsForChartJS(testData), 'graph');
 
 function execute (htmlID, step, probe){
@@ -44,17 +32,15 @@ function execute (htmlID, step, probe){
 	// Initiating chart
 	getDataFromServlet(step, probe, true, 0, function(){
 		
-		console.log('Callback : '+rawDataFromServlet);
-		cutTheChartAfterXMinutes(XplotTimeRangeInMinutes);
+
 		buildDataSetsForChartJS(function(){
 
 			buildGraph(chartData, htmlID);		
-
+			isDataSetAtMaximumSize ();
 		});
 		
 	});
 
-	console.log (rawDataFromServlet);
 
 	
 	
@@ -127,26 +113,26 @@ function execute (htmlID, step, probe){
 		}
 		if (!init){
 			
-			console.log ('/d/'+XplotTimeRangeInMinutes);
 			address += '/d/'+XplotTimeRangeInMinutes;
 			
+		}
+		if (init){
+			address+='/limitTo/'+maxPointsNumber;
+
 		}
 
 			/* if null => all probes */
 		
 		console.log('Calling '+address);
+		rawDataFromServlet = null;
 		// If query is OK setting rawDataFromServlet
 		jQuery.ajax (address,{
 			
 			success : function (result){
 				console.log('Call success');
-
-				if (init){
-					rawDataFromServlet = result;
-				} else {
-					rawDataFromServlet.concat(result);
-				}
-
+		
+				rawDataFromServlet = result;
+			
 
 				callback();
 			},
@@ -171,7 +157,6 @@ function execute (htmlID, step, probe){
 	}
 	
 	function buildGraph(dataSets, divID) {
-		console.log (document.getElementById('graph'));
 	
 		var ctx = document.getElementById(divID).getContext("2d");
 		liveChart = new Chart(ctx).Line(dataSets, chartOptions);
@@ -192,7 +177,7 @@ function execute (htmlID, step, probe){
 	function buildDataSetsForChartJS (callback){
 		
 		var xLabels = [];
-		var yValues = {}
+		var yValues = {};
 		var datasets = {};
 		var data = [];
 		
@@ -206,7 +191,7 @@ function execute (htmlID, step, probe){
 			data = rawDataFromServlet;
 		}
 		
-
+		
 		// For each item
 		jQuery.each (data, function (i, item){
 			// item : {"date":"2016-03-16
@@ -220,8 +205,12 @@ function execute (htmlID, step, probe){
 			
 			
 			// Everytime a new date is added in xLabels
-			xLabels.push(formatDateFromJavaToJS(item.date));
-			
+
+			//console.log ('Array : '+xLabels+ ' '+formatDateFromJavaToJS(item.date)+' '+typeof formatDateFromJavaToJS(item.date)+ ' '+xLabels.indexOf(formatDateFromJavaToJS(item.date)));
+			if (xLabels.indexOf(formatDateFromJavaToJS(item.date)) == -1){
+				xLabels.push(formatDateFromJavaToJS(item.date));
+			}
+		
 			var itemName = item.name;
 
 			if (!yValues.hasOwnProperty(itemName)){
@@ -229,41 +218,56 @@ function execute (htmlID, step, probe){
 				yValues[itemName] = [];
 
 			}
-				yValues[itemName].push(item.temp);
-			
+			yValues[itemName].push(item.temp);
 			currentLastID = item.id;			
 		});
 
-		//console.log (xLabels)
+
 		// Building final data for ChartJS
 
 		chartData.labels = xLabels;
 		chartData.datasets = [];
 		
-		//console.log (yValues);
 
-		
-		jQuery.each (yValues, function(i, item){
+		if (yValues.PROBE0.length > 0){
+
+			jQuery.each (yValues, function(i, item){
 			
-			//console.log (item);
+				chartData.datasets.push (
+					{
+	
+					    label: i,
+					    fillColor: "rgba("+detemineColorForSet()+",0.2)",
+					    strokeColor: "rgba("+detemineColorForSet()+",1)",
+					    pointColor: "rgba("+detemineColorForSet()+",1)",
+					    pointStrokeColor: "#fff",
+					    pointHighlightFill: "#fff",
+					    pointHighlightStroke: "rgba("+detemineColorForSet()+",1)",
+					    data: item
+					
+					}					
+				);
+
+			});
+
+		}
+		else {
+			
 			chartData.datasets.push (
+
 				{
 	
-				    label: i,
-				    fillColor: "rgba("+detemineColorForSet(i, yValues.length)+",0.2)",
-				    strokeColor: "rgba("+detemineColorForSet(i, yValues.length)+",1)",
-				    pointColor: "rgba("+detemineColorForSet(i, yValues.length)+",1)",
+				    label: "NOTAPROBE",
+				    fillColor: "rgba("+detemineColorForSet(0, yValues.length)+",0.2)",
+				    strokeColor: "rgba("+detemineColorForSet(0, yValues.length)+",1)",
+				    pointColor: "rgba("+detemineColorForSet(0, yValues.length)+",1)",
 				    pointStrokeColor: "#fff",
 				    pointHighlightFill: "#fff",
-				    pointHighlightStroke: "rgba("+detemineColorForSet(i, yValues.length)+",1)",
-				    data: item
+				    pointHighlightStroke: "rgba("+detemineColorForSet()+",1)",
+				    data: [20.0]
 					
-				}					
-			);
-			//console.log(chartData);
-
-		});
-
+				});	
+		}
 		callback();
 		
 	}
@@ -273,20 +277,33 @@ function execute (htmlID, step, probe){
 	 */
 	function updateChartWithNewData (data){
 		
-		cutTheChartAfterXMinutes(XplotTimeRangeInMinutes);
+
 		if (typeof data == "string"){
 			
 			data = jQuery.parseJSON(data);
 		}
 		
+		var array=[];
+
 		jQuery.each (data, function (i, item){
-			//console.log (item);
-			console.log(item);	
-			liveChart.addData([item.temp], formatDateFromJavaToJS(item.date));
-			
+			console.log(formatDateFromJavaToJS(item.date)+ ' '+array[0]);
+			console.log(array);
+			if (typeof array[formatDateFromJavaToJS(item.date)] != 'undefined'){
+				array[formatDateFromJavaToJS(item.date)].push(item.temp);
+			} else {
+				array[formatDateFromJavaToJS(item.date)] = [item.temp];
+			}
+						console.log(array);
+
 			currentLastID = item.id;
 			
 		});
+		isDataSetAtMaximumSize();
+
+		for (a in array){
+			liveChart.addData(array[a], a);
+
+		}
 	}
 	
 	
@@ -298,7 +315,7 @@ function execute (htmlID, step, probe){
 	 * Returns RGB color code "xxx,yyy,zzz"
 	 * 
 	 */
-	function detemineColorForSet(id, totalIDs){
+	function detemineColorForSet(){
 
 
 		colorTable = [Math.floor((Math.random() * 255) + 1), Math.floor((Math.random() * 255) + 1), Math.floor((Math.random() * 255) + 1)];
@@ -318,27 +335,23 @@ function execute (htmlID, step, probe){
 		
 		var newDate = moment(date).format('LTS');
 		
-		//console.log (newDate);
 		return newDate;
 	}
 
 
-	function cutTheChartAfterXMinutes (minutes){
+
+
+	function isDataSetAtMaximumSize (){
 		
-		var newChartData = [];
-		jQuery.each(rawDataFromServlet, function (i, item){
+				for (var i = 0; i < liveChart.datasets.length ; i++){
 
-			if (typeof item.date != 'undefined'){
-					//console.log(moment(item.date)+' : '+moment().subtract(minutes, 'minutes'));
-				if (moment(item.date).isSameOrAfter(moment().subtract(minutes, 'minutes'))){
-					
-					liveChart.removeData();
-
-					
+					for (var j = 0; j < liveChart.datasets[i].points.length - maxPointsNumber ; j++){
+						console.log('Removing data : '+ liveChart.datasets[i].points.length-maxPointsNumber);
+						liveChart.removeData();	
+					}
 				}
-			}
-			
-		});
-		
 
 	}
+
+	
+
