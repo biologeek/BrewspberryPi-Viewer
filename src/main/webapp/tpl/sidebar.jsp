@@ -15,5 +15,8 @@
                         <li>
                             <a href="../brewspberry-api/Actionner?type=listActioner"><i class="icon-chevron-right"></i>Actionneurs</a>
                         </li>
+                        <li>
+                            <a href="TemperatureServlet"><i class="icon-chevron-right"></i>Temps réel</a>
+                        </li>
                     </ul>
                 </div>
