@@ -36,7 +36,7 @@
 <script src="vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
 <script type="text/javascript">
-	function changeActionerState(brew, step, actionerUUID, actionerID) {
+	function changeActionerState(brew, step, actionerUUID, actionerID, actionerType) {
 
 		if (brew != null && step != null) {
 
@@ -52,7 +52,31 @@
 											+ "&eid=" + step,
 									context : document.body
 								}).done(function() {
-							$(this).addClass("done");
+									switch (actionerType){
+									case '1' :
+										/*
+										 * DS18B20
+										 */
+										$('#IMGACT'+actionerID).attr('src', 'images/thermo-off.jpg');
+										break;
+										
+
+									case '2' :
+										/*
+										 * PUMP
+										 */
+										$('#IMGACT'+actionerID).attr('src', 'images/pump-off.jpg');
+										break;
+										
+
+									case '3' :
+										/*
+										 * ENGINE
+										 */
+										$('#IMGACT'+actionerID).attr('src', 'images/engine-off.jpg');
+										break;
+										 
+									}
 						});
 
 			}
@@ -63,7 +87,31 @@
 								+ step,
 						context : document.body
 					}).done(function() {
-				$(this).addClass("done");
+						switch (actionerType){
+						case '1' :
+							/*
+							 * DS18B20
+							 */
+							$('#IMGACT'+actionerID).attr('src', 'images/thermo-on.jpg');
+							break;
+							
+
+						case '2' :
+							/*
+							 * PUMP
+							 */
+							$('#IMGACT'+actionerID).attr('src', 'images/pump-on.jpg');
+							break;
+							
+
+						case '3' :
+							/*
+							 * ENGINE
+							 */
+							$('#IMGACT'+actionerID).attr('src', 'images/engine-on.jpg');
+							break;
+							 
+						}
 			});
 
 		}
@@ -131,17 +179,17 @@
 														<td colspan="4"><c:forEach
 																items="${availableActioners}" var="actioner">
 																<a href="#"
-																	onclick="changeActionerState('${steps[loop].getEtp_brassin().getBra_id()}','${steps[loop].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}')">
+																	onclick="changeActionerState('${steps[loop].getEtp_brassin().getBra_id()}','${steps[loop].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}', '${actioner.getAct_type()}')">
 																	<c:if test="${actioner.getAct_type() == 1}">
-																		<img style="height:50px; width:50px;" src="images/thermo-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
+																		<img id="IMGACT${actioner.getAct_id()}" style="height:50px; width:50px;" src="images/thermo-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
 																	</c:if>
 																	
 																	<c:if test="${actioner.getAct_type() == 2}">
-																		<img style="height:50px; width:50px;" src="images/pump-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
+																		<img id="IMGACT${actioner.getAct_id()}" style="height:50px; width:50px;" src="images/pump-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
 																	</c:if>
 																	
 																	<c:if test="${actioner.getAct_type() == 3}">
-																		<img style="height:50px; width:50px;" src="images/engine-off.png" alt="${steps[loop].getEtp_nom()}" ></a>
+																		<img id="IMGACT${actioner.getAct_id()}" style="height:40px; width:60px;" src="images/engine-off.png" alt="${steps[loop].getEtp_nom()}" ></a>
 																	</c:if>
 																	
 															</c:forEach></td>
