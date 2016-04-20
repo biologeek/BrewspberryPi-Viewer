@@ -24,9 +24,11 @@
 
 <link href="vendors/wysiwyg/bootstrap-wysihtml5.css" rel="stylesheet"
 	media="screen">
-
-<script src="vendors/jquery-1.9.1.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script   src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<!-- 
+	<script src="vendors/jquery-1.9.1.js"></script>
+ -->
+ <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="vendors/jquery.uniform.min.js"></script>
 <script src="vendors/chosen.jquery.min.js"></script>
 <script src="vendors/bootstrap-datepicker.js"></script>
@@ -86,7 +88,6 @@
         <![endif]-->
 <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
-<script   src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 

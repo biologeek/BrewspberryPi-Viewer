@@ -99,6 +99,7 @@ function execute (htmlID, step, probe, maxPoints){
 		} else {
 			
 			alert ('UUID is not a string')
+		
 		}
 
 
