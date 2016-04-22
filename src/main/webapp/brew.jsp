@@ -57,7 +57,7 @@
 										/*
 										 * DS18B20
 										 */
-										$('#IMGACT'+actionerID).attr('src', 'images/thermo-off.jpg');
+										$('#IMGACT'+actionerUUID).attr('src', 'images/thermo-off.jpg');
 										break;
 										
 
@@ -65,7 +65,7 @@
 										/*
 										 * PUMP
 										 */
-										$('#IMGACT'+actionerID).attr('src', 'images/pump-off.jpg');
+										$('#IMGACT'+actionerUUID).attr('src', 'images/pump-off.jpg');
 										break;
 										
 
@@ -73,7 +73,7 @@
 										/*
 										 * ENGINE
 										 */
-										$('#IMGACT'+actionerID).attr('src', 'images/engine-off.jpg');
+										$('#IMGACT'+actionerUUID).attr('src', 'images/engine-off.png');
 										break;
 										 
 									}
@@ -92,7 +92,7 @@
 							/*
 							 * DS18B20
 							 */
-							$('#IMGACT'+actionerID).attr('src', 'images/thermo-on.jpg');
+							$('#IMGACT'+actionerUUID).attr('src', 'images/thermo-on.jpg');
 							break;
 							
 
@@ -100,7 +100,7 @@
 							/*
 							 * PUMP
 							 */
-							$('#IMGACT'+actionerID).attr('src', 'images/pump-on.jpg');
+							$('#IMGACT'+actionerUUID).attr('src', 'images/pump-on.jpg');
 							break;
 							
 
@@ -108,7 +108,7 @@
 							/*
 							 * ENGINE
 							 */
-							$('#IMGACT'+actionerID).attr('src', 'images/engine-on.jpg');
+							$('#IMGACT'+actionerUUID).attr('src', 'images/engine-on.png');
 							break;
 							 
 						}
@@ -181,15 +181,15 @@
 																<a href="#"
 																	onclick="changeActionerState('${steps[loop].getEtp_brassin().getBra_id()}','${steps[loop].getEtp_id()}','${actioner.getAct_uuid()}','${actioner.getAct_id()}', '${actioner.getAct_type()}')">
 																	<c:if test="${actioner.getAct_type() == 1}">
-																		<img id="IMGACT${actioner.getAct_id()}" style="height:50px; width:50px;" src="images/thermo-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
+																		<img id="IMGACT${actioner.getAct_uuid()}" style="height:50px; width:50px;" src="images/thermo-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
 																	</c:if>
 																	
 																	<c:if test="${actioner.getAct_type() == 2}">
-																		<img id="IMGACT${actioner.getAct_id()}" style="height:50px; width:50px;" src="images/pump-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
+																		<img id="IMGACT${actioner.getAct_uuid()}" style="height:50px; width:50px;" src="images/pump-off.jpg" alt="${steps[loop].getEtp_nom()}" ></a>
 																	</c:if>
 																	
 																	<c:if test="${actioner.getAct_type() == 3}">
-																		<img id="IMGACT${actioner.getAct_id()}" style="height:40px; width:60px;" src="images/engine-off.png" alt="${steps[loop].getEtp_nom()}" ></a>
+																		<img id="IMGACT${actioner.getAct_uuid()}" style="height:40px; width:60px;" src="images/engine-off.png" alt="${steps[loop].getEtp_nom()}" ></a>
 																	</c:if>
 																	
 															</c:forEach></td>

@@ -37,9 +37,9 @@ function execute (htmlID, step, probe, maxPoints){
 		buildDataSetsForChartJS(function(){
 
 			buildGraph(chartData, htmlID);		
-			isDataSetAtMaximumSize ();
 		});
-		
+		isDataSetAtMaximumSize ();
+
 	});
 
 
@@ -125,13 +125,13 @@ function execute (htmlID, step, probe, maxPoints){
 
 			/* if null => all probes */
 		
-		console.log('Calling '+address);
+		//console.log('Calling '+address);
 		rawDataFromServlet = null;
 		// If query is OK setting rawDataFromServlet
 		jQuery.ajax (address,{
 			
 			success : function (result){
-				console.log('Call success');
+				//console.log('Call success');
 		
 				rawDataFromServlet = result;
 			
@@ -288,14 +288,14 @@ function execute (htmlID, step, probe, maxPoints){
 		var array=[];
 
 		jQuery.each (data, function (i, item){
-			console.log(formatDateFromJavaToJS(item.date)+ ' '+array[0]);
-			console.log(array);
+			//console.log(formatDateFromJavaToJS(item.date)+ ' '+array[0]);
+			//console.log(array);
 			if (typeof array[formatDateFromJavaToJS(item.date)] != 'undefined'){
 				array[formatDateFromJavaToJS(item.date)].push(item.temp);
 			} else {
 				array[formatDateFromJavaToJS(item.date)] = [item.temp];
 			}
-						console.log(array);
+						//console.log(array);
 
 			currentLastID = item.id;
 			
@@ -344,11 +344,19 @@ function execute (htmlID, step, probe, maxPoints){
 
 
 	function isDataSetAtMaximumSize (){
+			
+				if (liveChart.datasets.length > 0){
+					var length = liveChart.datasets.length;
+				} else {
+					var length = 0;
+				}
+				
+				//console.log(length);
 		
-				for (var i = 0; i < liveChart.datasets.length ; i++){
-
-					for (var j = 0; j < liveChart.datasets[i].points.length - maxPointsNumber ; j++){
-						console.log('Removing data : '+ liveChart.datasets[i].points.length-maxPointsNumber);
+				for (var i = 0; i < length; i++){
+					var remainingToRemove = liveChart.datasets[i].points.length - maxPointsNumber;
+					for (var j = 0; j < remainingToRemove ; j++){
+					//	console.log('Removing data : '+ liveChart.datasets[i].points.length-maxPointsNumber);
 						liveChart.removeData();	
 					}
 				}

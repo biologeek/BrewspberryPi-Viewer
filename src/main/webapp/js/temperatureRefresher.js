@@ -16,6 +16,8 @@ var refreshDelay = 5000; // Refreshes every 5 s
 /**
  * divTofillIDsList contains IDs of fields to fill in page. Values are UUIDs o each actionner 
  * 
+ * format of divToFillIDsList : TEMP\step\uuid
+ * 
  * @param step
  * @param uuid
  * @param divToFillIDsList
@@ -37,10 +39,13 @@ function execute (step, uuid, divToFillIDsList){
 			
 			for (element in rawData){
 				
-				if (checkIfUUIDExistsInPage(rawData.uuid, divToFillIDsList)
-				
+				if (checkIfUUIDExistsInPage(element.uuid, divToFillIDsList){
+					
+					$('#TEMP'+element.step+element.uuid).text(element.temp);
+						
+				}
+
 			}
-			$('#'+divToFillID).text()
 			
 		});
 		
@@ -91,7 +96,16 @@ function getDataFromService (params, callback){
 	
 function checkIfUUIDExistsInPage (uuidFromService, uuidListFromPage){
 	
+	for (uuidFrompage in uuidListFromPage){
+		
+		if (uuidFromService == uuidFromPage){
+			
+			return true;
+			
+		}
 	
+	}
 	
-}
+	return false;
+
 }
