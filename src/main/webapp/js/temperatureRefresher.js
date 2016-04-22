@@ -13,7 +13,15 @@ var refreshDelay = 5000; // Refreshes every 5 s
 
 
 
-function execute (step, uuid){
+/**
+ * divTofillIDsList contains IDs of fields to fill in page. Values are UUIDs o each actionner 
+ * 
+ * @param step
+ * @param uuid
+ * @param divToFillIDsList
+ * @returns
+ */
+function execute (step, uuid, divToFillIDsList){
 	
 	
 	if (typeof step != 'undefined' && typeof uuid != 'undefined' ){
@@ -24,7 +32,15 @@ function execute (step, uuid){
 		};
 		
 		
-		getDataFromService(parameters, function (){
+		getDataFromService(parameters, function (rawData){
+			
+			
+			for (element in rawData){
+				
+				if (checkIfUUIDExistsInPage(rawData.uuid, divToFillIDsList)
+				
+			}
+			$('#'+divToFillID).text()
 			
 		});
 		
@@ -53,7 +69,7 @@ function getDataFromService (params, callback){
 			rawDataFromService = result;
 		
 
-			callback();
+			callback(rawDataFromService);
 		},
 		error : function (request, status, error) {
 			
@@ -68,4 +84,14 @@ function getDataFromService (params, callback){
 			rawDataFromServlet = new Array();
 		}
 	
+}
+	
+	
+	
+	
+function checkIfUUIDExistsInPage (uuidFromService, uuidListFromPage){
+	
+	
+	
+}
 }
