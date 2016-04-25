@@ -39,8 +39,11 @@ function execute (step, uuid, divToFillIDsList){
 			
 			for (element in rawData){
 				
-				if (checkIfUUIDExistsInPage(element.uuid, divToFillIDsList){
+				if (checkIfUUIDExistsInPage('TEMP'+element.step+element.uuid, divToFillIDsList){
 					
+					/*
+					 * Modifies div element text with data retrieved from serice
+					 */
 					$('#TEMP'+element.step+element.uuid).text(element.temp);
 						
 				}
