@@ -138,7 +138,7 @@ public class BrewProcessor implements Processor<Brassin> {
 
 				currentBrassinStatut = request.getParameter("statutBrassin");
 
-				if (currentBrassinStatut == "")
+				if (currentBrassinStatut.equals(""))
 					currentBrassin.setBra_statut(10);
 				else
 					currentBrassin.setBra_statut(Integer

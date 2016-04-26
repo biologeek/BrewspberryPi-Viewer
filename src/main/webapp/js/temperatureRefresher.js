@@ -7,7 +7,7 @@
  ******************************************************************************/
 
 
-var serviceAddress = 'http://192.168.0.100:8080/brewspberry-api/rest/getLastTemperatureValue';
+var serviceAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/getLastTemperatureValue';
 
 var refreshDelay = 5000; // Refreshes every 5 s
 
@@ -39,8 +39,11 @@ function execute (step, uuid, divToFillIDsList){
 			
 			for (element in rawData){
 				
-				if (checkIfUUIDExistsInPage(element.uuid, divToFillIDsList){
+				if (checkIfUUIDExistsInPage('TEMP'+element.step+element.uuid, divToFillIDsList){
 					
+					/*
+					 * Modifies div element text with data retrieved from serice
+					 */
 					$('#TEMP'+element.step+element.uuid).text(element.temp);
 						
 				}

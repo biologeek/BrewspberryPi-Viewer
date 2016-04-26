@@ -10,8 +10,8 @@ var rawDataFromServlet = [];
 var liveChart;
 var chartOptions ={animationSteps: 10};
 
-var initServletAddress = 'http://192.168.0.100:8080/brewspberry-api/rest/initTemperatures';
-var updateServletAddress = 'http://192.168.0.100:8080/brewspberry-api/rest/updateTemperatures';
+var initServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/initTemperatures';
+var updateServletAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/updateTemperatures';
 	
 var refreshDelay = 5000; // Refreshes every 5 s
 
