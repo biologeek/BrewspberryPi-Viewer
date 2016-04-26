@@ -7,7 +7,7 @@
  ******************************************************************************/
 
 
-var serviceAddress = 'http://192.168.0.20:8080/brewspberry-api/rest/getLastTemperatureValue';
+var serviceAddress = 'http://192.168.0.100:8080/brewspberry-api/rest/getLastTemperatureValue';
 
 var refreshDelay = 5000; // Refreshes every 5 s
 
