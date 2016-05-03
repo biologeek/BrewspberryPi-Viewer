@@ -24,6 +24,7 @@
 <script   src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js">
 </script>
@@ -247,10 +248,31 @@
 									<tbody>
 										<tr>
 											<td>Label</td>
-											<td><input type="text" name="step_label" /></td>
+											<td><input type="text" name="step_label" /><</td>
 
 											<td>Durée théorique</td>
 											<td><input type="text" name="step_duration" /></td>
+										</tr>
+										<tr>
+											<td>Début</td>
+											<td id= "stepBeginningAdd"><input type="text" name="step_beginnging" />
+												<script type="text/javascript">
+													$(function(){
+														
+														$("#stepBeginningAdd").datetimepicker();
+													}												
+												</script>
+											</td>
+
+											<td>Fin</td>
+											<td id= "stepEndAdd"><input type="text" name="step_end" />
+											<script type="text/javascript">
+													$(function(){
+														
+														$("#stepEndAdd").datetimepicker();
+													}												
+												</script>
+												</td>
 										</tr>
 										<tr>
 											<td>Température théorique</td>
