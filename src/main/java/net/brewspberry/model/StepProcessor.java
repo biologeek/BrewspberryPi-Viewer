@@ -19,6 +19,7 @@ import net.brewspberry.business.service.EtapeServiceImpl;
 import net.brewspberry.business.service.HopServiceImpl;
 import net.brewspberry.business.service.MaltServiceImpl;
 import net.brewspberry.business.service.YeastServiceImpl;
+import net.brewspberry.util.DateManipulator;
 import net.brewspberry.util.LogManager;
 
 public class StepProcessor implements Processor<Object> {
@@ -81,13 +82,8 @@ public class StepProcessor implements Processor<Object> {
 		// Step beginning date
 		if (request.getParameter("step_beginning") != null) {
 
-			try {
-				currentStepBeginningDate = sdf.parse(request
-						.getParameter("step_beginning"));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			currentStepBeginningDate = DateManipulator.formatDateFromVariousPatterns(request
+					.getParameter("step_beginning"));
 
 			if (currentStep.getEtp_debut() == null) {
 
