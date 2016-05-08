@@ -8,6 +8,12 @@
 	<description>BrewspberryPi webapp</description>
 		<packaging>war</packaging>
 	
+	<parent>
+		<groupId>net.brewspberry</groupId>
+		<artifactId>brewspberry-rpm-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../brewspberry-rpm-parent</relativePath>
+	</parent>
 	<dependencies>
 		<dependency>
 			<groupId>net.brewspberry</groupId>
