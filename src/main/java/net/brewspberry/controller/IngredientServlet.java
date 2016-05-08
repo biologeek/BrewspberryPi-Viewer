@@ -161,7 +161,7 @@ public class IngredientServlet extends HttpServlet {
 					
 						ing_id = Long.parseLong(ingredient_id);
 						malt = (SimpleMalt) simpleMaltService.getElementById(ing_id);
-						logger.info("Got a SimpleMalt with ID "+ing_id);
+						logger.fine("Got a SimpleMalt with ID "+ing_id);
 						
 					} catch (Exception e){
 						
@@ -170,7 +170,6 @@ public class IngredientServlet extends HttpServlet {
 					}
 				}
 
-				logger.info("Recording malt");
 
 				proc.record((SimpleMalt) malt, request);
 				
@@ -187,7 +186,7 @@ public class IngredientServlet extends HttpServlet {
 					
 						ing_id = Long.parseLong(ingredient_id);
 						houblon = (SimpleHoublon) simpleHopService.getElementById(ing_id);
-						logger.info("Got a SimpleHoublon with ID "+ing_id);
+						logger.fine("Got a SimpleHoublon with ID "+ing_id);
 
 					} catch (Exception e){
 						
@@ -195,7 +194,6 @@ public class IngredientServlet extends HttpServlet {
 					
 					}
 				}
-				logger.info("Recording hop");
 
 				proc.record((SimpleHoublon) houblon, request);
 
@@ -212,7 +210,7 @@ public class IngredientServlet extends HttpServlet {
 					
 						ing_id = Long.parseLong(ingredient_id);
 						levure = (SimpleLevure) simpleYeastService.getElementById(ing_id);
-						logger.info("Got a SimpleLevure with ID "+ing_id);
+						logger.fine("Got a SimpleLevure with ID "+ing_id);
 
 					} catch (Exception e){
 						
@@ -303,11 +301,10 @@ public class IngredientServlet extends HttpServlet {
 		/*
 		 * Building menus for JS script
 		 */
-		logger.info(String.valueOf(Constants.CEREALS.size()));
 
 		for (Map.Entry<String, String> ent : Constants.CEREALS.entrySet()){
 			
-			logger.info(ent.getKey() + " : "+ent.getValue());
+			logger.fine(ent.getKey() + " : "+ent.getValue());
 			
 		}
 

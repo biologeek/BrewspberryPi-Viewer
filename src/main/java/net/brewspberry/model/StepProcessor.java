@@ -73,7 +73,7 @@ public class StepProcessor implements Processor<Object> {
 			// Attaching brew to step
 			if (parent != null && parentBrew.getBra_id() != null && !parentBrew.getBra_id().equals(new Brassin())) {
 				
-				logger.info("Attaching to brew "+parentBrew);
+				logger.fine("Attaching to brew "+parentBrew);
 				currentStep.setEtp_brassin(parentBrew);
 			}
 
@@ -83,7 +83,7 @@ public class StepProcessor implements Processor<Object> {
 		if (request.getParameter("step_beginning") != null) {
 
 			currentStepBeginningDate = DateManipulator.formatDateFromVariousPatterns(request
-					.getParameter("step_beginning"));
+					.getParameter("step_beginning")).getTime();
 
 			if (currentStep.getEtp_debut() == null) {
 

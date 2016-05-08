@@ -168,11 +168,11 @@ public class BrewProcessor implements Processor<Brassin> {
 
 					// Pour chaque malt enregistré, on définit la quantité
 					for (Malt malt : currentBrassin.getBra_malts()) {
-						logger.info("Got " + currentBrassinMalts.length
+						logger.fine("Got " + currentBrassinMalts.length
 								+ " malts, brew mid=" + currentBrassinMalts[i]);
 
-					//	malt.setIng_quantite(Double
-						//		.parseDouble(currentBrassinMaltsQte[i]));
+						malt.setIng_quantite(Float
+								.parseFloat(currentBrassinMaltsQte[i]));
 
 					}
 				} else {
@@ -212,7 +212,7 @@ public class BrewProcessor implements Processor<Brassin> {
 						// Pour chaque houblon enregistré, on définit la
 						// quantité
 
-						logger.info("Got " + currentBrassinHoublons.length
+						logger.fine("Got " + currentBrassinHoublons.length
 								+ " hops, brew hop id="
 								+ currentBrassinHoublons[i]);
 							houblon.setIng_quantite(Float
@@ -250,15 +250,15 @@ public class BrewProcessor implements Processor<Brassin> {
 
 				int i = 0;
 				if (currentBrassinLevures.length == currentBrassinLevuresQte.length) {
-					for (Levure levure : currentBrassin.getBra_levures()) {
+					for (Levure lev : currentBrassin.getBra_levures()) {
 						// Pour chaque levure enregistrée, on définit la
 						// quantité
 						logger.info("Got " + currentBrassinLevures.length
 								+ " yeasts, brew yeast id="
 								+ currentBrassinLevures[i]);
 
-					//	levure.setIng_quantite(Double
-						//		.parseDouble(currentBrassinLevuresQte[i]));
+						lev.setIng_quantite(Float
+								.parseFloat(currentBrassinLevuresQte[i]));
 
 					}
 				} else {
@@ -294,7 +294,6 @@ public class BrewProcessor implements Processor<Brassin> {
 		}
 
 		currentBrassin.setBra_date_maj(new Date());
-		logger.info(currentBrassin.toString());
 
 		// Enregistrement du brassin
 		try {

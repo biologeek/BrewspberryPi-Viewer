@@ -72,15 +72,15 @@ public class Accueil extends HttpServlet {
 		//Displays brew page
 		else if (bid > 0){
 			
-			logger.info("Retrieving brew from DB for id : "+bid);
+			logger.fine("Retrieving brew from DB for id : "+bid);
 			Brassin currentBrew = brassinService.getElementById(bid);
 			
 			if (currentBrew != null){
-				logger.info("Found 1 brew : "+currentBrew);
+				logger.fine("Found 1 brew : "+currentBrew);
 			}
 			request.setAttribute("brassin", currentBrew);
 			
-			logger.info("Steps for brew : "+currentBrew.getBra_etapes());
+			logger.fine("Steps for brew : "+currentBrew.getBra_etapes());
 			
 			List<Actioner> availableActioners = new ArrayList<Actioner>();
 			
