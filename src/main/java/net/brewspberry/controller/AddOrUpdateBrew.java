@@ -135,7 +135,7 @@ public class AddOrUpdateBrew extends HttpServlet {
 		
 		// Création de brassin
 		// On passe les paramètres pour peupler les listes
-		logger.info("Création d'un brassin");
+		logger.fine("Création d'un brassin");
 
 		maltList = (new MaltServiceImpl()).new SimpleMaltServiceImpl().getAllDistinctElements();
 		hopList = (new HopServiceImpl()).new SimpleHopServiceImpl().getAllDistinctElements();
@@ -164,7 +164,6 @@ public class AddOrUpdateBrew extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-		logger.info("doPost");
 		Enumeration<String> parameterNames = request.getParameterNames();
 
 		List<String[]> paramList = new ArrayList<String[]>();
