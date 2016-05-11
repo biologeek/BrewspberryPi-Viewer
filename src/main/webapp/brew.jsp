@@ -260,7 +260,7 @@
 													$(function(){
 														
 														$("#stepBeginningAdd").datetimepicker();
-													}												
+													});											
 												</script>
 											</td>
 
@@ -270,7 +270,7 @@
 													$(function(){
 														
 														$("#stepEndAdd").datetimepicker();
-													}
+													});
 												</script>
 												</td>
 										</tr>
